@@ -11,18 +11,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
 <style>
 /* Layout: herramienta en pasos, una columna editorial Scalla; trazo Presencia abre, Equilibrio separa, Reposo cierra. */
-:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#FAF8F4; --surface:#F2EEE6; --ink:#1A1A18; --carbon:#23211E; --muted:#6E6A62;
   --line:#DDD7CB; --gold:#BC8A34; --gold-soft:#EADBBE; --slate:#4A6B5A; --warn:#A4532E; --onink:#FAF8F4;
   --display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#171614; --surface:#211F1C; --ink:#F1EDE5; --carbon:#E8E3D9; --muted:#A39D92;
-  --line:#3A3631; --gold:#D4A54F; --gold-soft:#4A3B20; --slate:#8DB09D; --warn:#E08A62; --onink:#171614; color-scheme:dark }}
-:root[data-theme="dark"]{
-  --bg:#171614; --surface:#211F1C; --ink:#F1EDE5; --carbon:#E8E3D9; --muted:#A39D92;
-  --line:#3A3631; --gold:#D4A54F; --gold-soft:#4A3B20; --slate:#8DB09D; --warn:#E08A62; --onink:#171614; color-scheme:dark }
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
