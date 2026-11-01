@@ -137,6 +137,10 @@ label.f input,label.f select{padding:10px;border:1px solid var(--line);border-ra
 .touch{margin-top:10px;background:var(--surface);border-radius:4px;padding:12px 14px;font-size:.86rem;display:flex;flex-direction:column;gap:8px}
 .touch .btn{font-size:.84rem;padding:8px 14px}
 .delta{font-size:.86rem;color:var(--slate);font-weight:500}
+.save{display:flex;flex-direction:column;gap:12px;padding:16px 18px;border-radius:4px;background:var(--surface);border-left:3px solid var(--slate)}
+.save__t{font-size:.9rem;color:var(--muted)}
+.save__t b{color:var(--carbon);font-weight:500}
+.btn.wa{background:var(--slate);border-color:var(--slate);color:#fff;align-self:flex-start}
 .stair svg{width:100%;height:auto;display:block}
 .cap{font-size:.78rem;color:var(--muted);margin-top:6px}
 .s-out{fill:none;stroke:var(--line);stroke-width:1.2}
@@ -285,8 +289,8 @@ footer.close p{font-size:.76rem;color:var(--muted)}
     <!-- Registro: solo para el plan de 30 días -->
     <div class="panel" id="gatePanel">
       <span class="eyebrow">Siguiente paso</span>
-      <h2>Recibe tu plan de liberación de 30 días</h2>
-      <p class="muted">Un plan semana por semana, armado con tus tres tareas que más te atan, para que dejen de depender de ti.</p>
+      <h2>Desbloquea tu plan de 30 días</h2>
+      <p class="muted">Un plan semana por semana, armado con tu semáforo, tu giro y las tres tareas que más te atan. Aparece aquí mismo al instante y podrás guardarlo en tu WhatsApp.</p>
       <form class="gate" id="gate" name="plan-30-dias" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
         <input type="hidden" name="form-name" value="plan-30-dias">
         <p class="hp"><label>No llenar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -300,7 +304,7 @@ footer.close p{font-size:.76rem;color:var(--muted)}
         <label class="consent full"><input type="checkbox" id="gOk" name="acepta_aviso" value="si" required><span>Leí y acepto el <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener">aviso de privacidad</a>. Scalla puede contactarme para dar seguimiento a mi plan.</span></label>
         <label class="consent full"><input type="checkbox" id="gInv" name="acepta_invitaciones" value="si"><span>Quiero recibir invitaciones a talleres y contenido de Scalla (opcional).</span></label>
         <p class="err full" id="gErr" role="alert"></p>
-        <button class="btn gold full" type="submit" id="gBtn" style="justify-self:start">Quiero mi plan de 30 días</button>
+        <button class="btn gold full" type="submit" id="gBtn" style="justify-self:start">Desbloquear mi plan de 30 días</button>
       </form>
     </div>
 
@@ -310,9 +314,17 @@ footer.close p{font-size:.76rem;color:var(--muted)}
         <span class="eyebrow" id="planFor">Tu plan</span>
         <h2>30 días para que tu negocio dependa menos de ti</h2>
       </div>
+      <div class="save">
+        <div class="save__t"><b>Guárdalo en tu WhatsApp para no perderlo.</b> Este plan vive en esta pantalla: si cierras la página o cambias de celular, ya no estará. Mándatelo a ti mismo (en WhatsApp, busca tu propio nombre o el chat «Tú») o a tu socio, y vuelve a él cada lunes.</div>
+        <a class="btn wa js-saveWa" href="#" target="_blank" rel="noopener">Guardar mi plan en WhatsApp</a>
+      </div>
       <div id="plan"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn ghost" type="button" id="copyPlan">Copiar plan</button>
+      <div class="save save--end">
+        <div class="save__t"><b>¿Ya te lo mandaste?</b> Ponte un recordatorio para cada lunes de este mes. Si tu socio o tu encargado lo tiene también, es más fácil que se cumpla.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn wa js-saveWa" href="#" target="_blank" rel="noopener">Guardar mi plan en WhatsApp</a>
+          <button class="btn ghost" type="button" id="copyPlan">Copiar plan</button>
+        </div>
       </div>
       <div class="panel accent">
         <h3>¿Quieres hacerlo acompañado?</h3>
@@ -529,6 +541,7 @@ footer.close p{font-size:.76rem;color:var(--muted)}
       ${wi===3?`<div class="touch"><span>Al terminar el mes, vuelve a medir tu índice y compara.</span><button class="btn ghost" type="button" id="remeasure">Volver a medir mi índice</button></div>`:""}
       </div></div>`).join("");
     const r=$("remeasure");if(r)r.onclick=()=>{S.prevIdx=stats(picked()).idx;go("tasks");};
+    setSaveLinks();
     $("waBtn").href=waMsg(`Hola, hice el Índice de Dependencia de Scalla: mi negocio depende ${st.idx} % de mí (semáforo ${SEM[sem(st.idx)].n.toLowerCase()}). Quiero agendar una Sesión de Claridad.`);
   }
 
@@ -561,6 +574,11 @@ footer.close p{font-size:.76rem;color:var(--muted)}
   let tt;function flash(m){$("toast").textContent=m;clearTimeout(tt);tt=setTimeout(()=>$("toast").textContent="",3500);}
   $("shareBtn").onclick=()=>{const st=stats(picked());
     copy(`Mi negocio depende ${st.idx} % de mí (semáforo ${SEM[sem(st.idx)].n.toLowerCase()}): ${fmt(st.own)} horas a la semana pasan por mis manos. ¿Y el tuyo? Mídelo gratis en 6 minutos: ${SITE_URL}`,"Resultado copiado. Pégalo en WhatsApp y mándaselo a tu socio.");};
+  function planText(){const pl=buildPlan(),st=stats(picked());
+    return `*Mi plan de 30 días · Scalla*\nÍndice de dependencia: ${st.idx}/100 · semáforo ${SEM[sem(st.idx)].n.toLowerCase()}${pl.k==="s"?" · trabajo solo":""}\nMeta del mes: ${pl.meta}\n\n`+
+      pl.weeks.map((w,i)=>`*Semana ${i+1}: ${w.t}*\n`+w.a.map(a=>"☐ "+a).join("\n")+`\nHerramienta: ${w.tool}`).join("\n\n")+
+      `\n\nAl terminar, vuelve a medir tu índice: ${SITE_URL}`;}
+  function setSaveLinks(){const u="https://wa.me/?text="+encodeURIComponent(planText());document.querySelectorAll(".js-saveWa").forEach(a=>a.href=u);}
   $("copyPlan").onclick=()=>{const pl=buildPlan();
     copy(`Meta del mes: ${pl.meta}\n\n`+pl.weeks.map((w,i)=>`Semana ${i+1}: ${w.t}\n`+w.a.map(a=>"• "+a).join("\n")+`\nHerramienta: ${w.tool}`).join("\n\n")+`\n\nÍndice de Dependencia · Scalla Consulting · ${SITE_URL}`,"Plan copiado.");};
   $("plan").addEventListener("change",e=>{if(e.target.dataset.k){S.checks[e.target.dataset.k]=e.target.checked;save();}});
