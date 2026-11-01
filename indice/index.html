@@ -4,43 +4,593 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Índice de Dependencia del Dueño · Scalla</title>
-<meta name="description" content="Muy pronto: mide cuántas horas de tu negocio dependen de ti, encuentra tu cuello de botella y recibe un plan de 30 días. Herramienta gratuita de Scalla Consulting.">
-<meta name="robots" content="noindex">
-<meta name="theme-color" content="#FAF8F4">
+<meta name="description" content="Mide gratis en 6 minutos cuántas horas de tu negocio dependen de ti, encuentra tu cuello de botella y recibe un plan de 30 días. Herramienta de Scalla Consulting.">
+<link rel="canonical" href="https://herramientas.scallaconsulting.com/indice/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
 <style>
-:root{--bg:#FAF8F4;--ink:#1A1A18;--carbon:#23211E;--muted:#6E6A62;--line:#DDD7CB;--gold:#BC8A34;--slate:#4A6B5A;
-  --display:"Cormorant Garamond",Georgia,serif;--body:"DM Sans",system-ui,sans-serif}
+/* Layout: herramienta en pasos, una columna editorial Scalla; trazo Presencia abre, Equilibrio separa, Reposo cierra. */
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#FAF8F4; --surface:#F2EEE6; --ink:#1A1A18; --carbon:#23211E; --muted:#6E6A62;
+  --line:#DDD7CB; --gold:#BC8A34; --gold-soft:#EADBBE; --slate:#4A6B5A; --warn:#A4532E; --onink:#FAF8F4;
+  --display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#171614; --surface:#211F1C; --ink:#F1EDE5; --carbon:#E8E3D9; --muted:#A39D92;
+  --line:#3A3631; --gold:#D4A54F; --gold-soft:#4A3B20; --slate:#8DB09D; --warn:#E08A62; --onink:#171614; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#171614; --surface:#211F1C; --ink:#F1EDE5; --carbon:#E8E3D9; --muted:#A39D92;
+  --line:#3A3631; --gold:#D4A54F; --gold-soft:#4A3B20; --slate:#8DB09D; --warn:#E08A62; --onink:#171614; color-scheme:dark }
+
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;display:flex;align-items:center;
-  padding:40px max(20px,env(safe-area-inset-left,0px)) 40px max(20px,env(safe-area-inset-right,0px))}
-main{max-width:620px;margin:0 auto;display:grid;grid-template-columns:4px 1fr;gap:22px}
-.bar{background:var(--carbon);border-radius:2px}
-.k{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:500}
-h1{font-family:var(--display);font-weight:600;font-size:clamp(2.2rem,7vw,3.2rem);line-height:1.05;color:var(--carbon);margin:12px 0 16px}
-h1 em{color:var(--slate)}
-p{margin:0 0 14px;color:var(--muted);max-width:52ch}
-.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-a.btn{display:inline-flex;padding:12px 20px;border-radius:3px;text-decoration:none;font-weight:500;font-size:.92rem}
-.p{background:var(--slate);color:#fff}.g{border:1px solid var(--line);color:var(--carbon)}
-a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+[hidden]{display:none!important}
+body{margin:0}
+img{max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 120px}
+.app{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:600;color:var(--carbon);text-wrap:balance;margin:0;line-height:1.08}
+h1{font-size:clamp(2.1rem,7.4vw,3.3rem)}
+h2{font-size:clamp(1.6rem,5vw,2.1rem)}
+h3{font-size:1.3rem}
+p{margin:0}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.view{display:flex;flex-direction:column;gap:28px}
+.stack{display:flex;flex-direction:column;gap:12px}
+
+/* Barra superior */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand b{font-family:var(--display);font-size:1.35rem;font-weight:600;color:var(--carbon);letter-spacing:.02em}
+.brand span{font-size:.72rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.steps{display:flex;gap:6px;list-style:none;margin:0;padding:0;font-size:.72rem;color:var(--muted)}
+.steps li{display:flex;align-items:center;gap:6px}
+.steps li+li::before{content:"";width:14px;height:1px;background:var(--line)}
+.steps li[aria-current="step"]{color:var(--carbon);font-weight:500}
+.steps li.done{color:var(--gold)}
+
+/* Intro con trazo Presencia */
+.opening{display:grid;grid-template-columns:4px 1fr;gap:18px}
+.presencia{background:var(--carbon);border-radius:2px}
+.opening .txt{display:flex;flex-direction:column;gap:16px;min-width:0}
+.lede{color:var(--muted);max-width:58ch;font-size:1rem}
+.promise{display:flex;flex-wrap:wrap;gap:0;margin-top:4px}
+.promise div{padding:0 16px;border-left:1px solid var(--line);display:flex;flex-direction:column}
+.promise div:first-child{padding-left:0;border-left:0}
+.promise b{font-family:var(--display);font-size:1.7rem;font-weight:600;color:var(--carbon);line-height:1.1}
+.promise span{font-size:.76rem;color:var(--muted)}
+.btn{border:1px solid var(--carbon);background:var(--carbon);color:var(--onink);padding:11px 20px;border-radius:3px;cursor:pointer;font-weight:500;font-size:.95rem;align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--carbon)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1A1A18}
+.linkbtn{border:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0;font-size:.86rem;align-self:flex-start}
+
+/* Giros */
+.giros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:620px){.giros{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.giro{border:1px solid var(--line);background:transparent;border-radius:4px;padding:14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0}
+.giro b{font-weight:500;font-size:.95rem}
+.giro span{font-size:.76rem;color:var(--muted)}
+.giro[aria-pressed="true"]{border-color:var(--carbon);background:var(--carbon);color:var(--onink)}
+.giro[aria-pressed="true"] span{color:var(--gold-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;padding:7px 14px;border-radius:999px;cursor:pointer;font-size:.88rem}
+.chip[aria-pressed="true"]{background:var(--carbon);color:var(--onink);border-color:var(--carbon)}
+
+/* Dominios y tareas */
+.domain{display:flex;flex-direction:column;gap:2px}
+.domain header{display:flex;flex-direction:column;gap:4px;padding-bottom:10px}
+.domain .k{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.domain .q{font-family:var(--display);font-style:italic;font-size:1.05rem;color:var(--muted)}
+.row{border-top:1px solid var(--line);padding:4px 0}
+.row:last-of-type{border-bottom:1px solid var(--line)}
+.pick{width:100%;display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;border:0;background:none;padding:10px 0;text-align:left;cursor:pointer}
+.box{width:20px;height:20px;border:1.5px solid var(--muted);border-radius:3px;display:grid;place-items:center}
+.pick[aria-pressed="true"] .box{background:var(--gold);border-color:var(--gold)}
+.pick[aria-pressed="true"] .box::after{content:"";width:9px;height:5px;border-left:2px solid #1A1A18;border-bottom:2px solid #1A1A18;transform:rotate(-45deg) translate(1px,-1px)}
+.pick .nm{min-width:0}
+.pick .tag{font-size:.7rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.detail{display:flex;flex-direction:column;gap:10px;padding:2px 0 14px 34px}
+.detail .lbl{font-size:.74rem;color:var(--muted)}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.levels button{border:0;border-left:1px solid var(--line);background:transparent;padding:8px 2px;font-size:.74rem;cursor:pointer;color:var(--muted);line-height:1.2}
+.levels button:first-child{border-left:0}
+.levels button[aria-pressed="true"]{color:var(--onink);font-weight:500}
+.levels button[aria-pressed="true"][data-l="0"]{background:var(--warn)}
+.levels button[aria-pressed="true"][data-l="1"]{background:var(--gold);color:#1A1A18}
+.levels button[aria-pressed="true"][data-l="2"]{background:var(--slate)}
+.levels button[aria-pressed="true"][data-l="3"]{background:var(--carbon)}
+.lvlhelp{font-size:.76rem;color:var(--muted)}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:3px;align-self:flex-start}
+.stepper button{border:0;background:none;width:36px;height:34px;cursor:pointer;font-size:1.1rem;color:var(--carbon)}
+.stepper output{min-width:6.5em;text-align:center;font-size:.86rem;font-variant-numeric:tabular-nums}
+.custom{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) auto;gap:8px;align-items:end}
+@media (max-width:560px){.custom{grid-template-columns:1fr 1fr}.custom .full{grid-column:1/-1}}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.76rem;color:var(--muted);min-width:0}
+label.f input,label.f select{padding:10px;border:1px solid var(--line);border-radius:3px;background:var(--bg);width:100%;font-size:.95rem;color:var(--ink)}
+
+/* Barra fija */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);z-index:5;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.bar .in{max-width:720px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bar .cnt{font-size:.86rem;color:var(--muted)}
+.bar .cnt b{color:var(--carbon);font-size:1.05rem}
+
+/* Resultado */
+.result{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;align-items:end}
+@media (max-width:560px){.result{grid-template-columns:1fr}}
+.score{display:flex;flex-direction:column;gap:8px}
+.score .big{font-variant-numeric:lining-nums tabular-nums;font-family:var(--display);font-size:5.6rem;line-height:.9;color:var(--carbon);font-weight:600}
+.score .big small{font-size:.4em;color:var(--muted);font-weight:500}
+.verdict{display:inline-flex;align-self:flex-start;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:500;border:1px solid currentColor}
+.v-high{color:var(--warn)} .v-mid{color:var(--gold)} .v-low{color:var(--slate)}
+.sem{display:inline-flex;gap:5px;align-items:center;margin-right:4px;vertical-align:-1px}.sem i{width:9px;height:9px;border-radius:50%;background:var(--line)}.sem i.on.r{background:var(--warn)}.sem i.on.a{background:var(--gold)}.sem i.on.v{background:var(--slate)}
+.meta-goal{font-family:var(--display);font-size:1.25rem;color:var(--carbon);font-style:italic}
+.tool-w{margin-top:8px;font-size:.84rem;color:var(--muted);border-left:2px solid var(--gold);padding-left:10px}
+.tool-w b{color:var(--carbon);font-weight:500}
+.touch{margin-top:10px;background:var(--surface);border-radius:4px;padding:12px 14px;font-size:.86rem;display:flex;flex-direction:column;gap:8px}
+.touch .btn{font-size:.84rem;padding:8px 14px}
+.delta{font-size:.86rem;color:var(--slate);font-weight:500}
+.stair svg{width:100%;height:auto;display:block}
+.cap{font-size:.78rem;color:var(--muted);margin-top:6px}
+.s-out{fill:none;stroke:var(--line);stroke-width:1.2}
+.s-fill{fill:var(--gold);transition:height .6s ease,y .6s ease}
+.s-pct{fill:var(--carbon);font:600 15px var(--body);font-variant-numeric:tabular-nums}
+.s-lab{fill:var(--muted);font:500 10.5px var(--body)}
+.panel{background:var(--surface);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.panel.accent{border-left:3px solid var(--gold)}
+.returns{display:flex;flex-wrap:wrap;gap:18px 30px;padding-top:12px;border-top:1px solid var(--line)}
+.returns div{display:flex;flex-direction:column}
+.returns .n{font-variant-numeric:lining-nums;font-family:var(--display);font-size:2rem;font-weight:600;color:var(--carbon);line-height:1}
+.returns .l{font-size:.76rem;color:var(--muted)}
+.ranking{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ranking li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:.9rem}
+.ranking li span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Registro */
+form.gate{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){form.gate{grid-template-columns:1fr}}
+form.gate .full{grid-column:1/-1}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.8rem;color:var(--muted)}
+.consent input{margin-top:3px;accent-color:var(--gold)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.err{font-size:.8rem;color:var(--warn);min-height:1.1em}
+
+/* Plan */
+.week{display:grid;grid-template-columns:3.2em minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+.week .wn{font-variant-numeric:lining-nums;font-family:var(--display);font-size:2.2rem;font-weight:600;color:var(--gold);line-height:1}
+.week h3{font-size:1.2rem;margin-bottom:6px}
+.week label{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;padding:4px 0;cursor:pointer}
+.week input{margin-top:4px;accent-color:var(--gold);flex:none}
+.week input:checked+span{color:var(--muted);text-decoration:line-through}
+.contact{font-size:.86rem;color:var(--muted)}
+.contact b{color:var(--carbon);user-select:all}
+.toast{font-size:.82rem;color:var(--slate);min-height:1.2em}
+
+/* Reposo */
+footer.close{display:flex;flex-direction:column;gap:10px;padding-top:18px;border-top:1px solid var(--carbon)}
+footer.close q{font-family:var(--display);font-style:italic;font-size:1.25rem;color:var(--carbon);quotes:"«" "»"}
+footer.close p{font-size:.76rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.s-fill{transition:none}}
 </style>
+<meta property="og:title" content="¿Cuántas horas de tu negocio dependen de ti?">
+<meta property="og:description" content="Mide gratis en 6 minutos tu Índice de Dependencia del Dueño y recibe un plan de 30 días. Scalla Consulting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://herramientas.scallaconsulting.com/indice/">
+<meta property="og:image" content="https://scallaconsulting.com/img/og-scalla.jpg">
+<meta property="og:locale" content="es_MX">
+<meta name="theme-color" content="#FAF8F4">
 </head>
 <body>
-<main>
-  <div class="bar" aria-hidden="true"></div>
-  <div>
-    <span class="k">Scalla · Herramienta gratuita · Muy pronto</span>
-    <h1>¿Cuántas horas de tu negocio <em>dependen de ti?</em></h1>
-    <p>El Índice de Dependencia del Dueño te dirá qué parte de tu operación sigue pasando por tus manos, cuál es tu cuello de botella y cómo soltarlo en 30 días.</p>
-    <p>Mientras lo terminamos, empieza con el Autodiagnóstico de Ascenso.</p>
-    <div class="row">
-      <a class="btn p" href="https://autodiagnostico.scallaconsulting.com">Hacer el Autodiagnóstico</a>
-      <a class="btn g" href="https://scallaconsulting.com">Ir a Scalla Consulting</a>
-    </div>
+
+<div class="app">
+  <div class="top">
+    <div class="brand"><b>Scalla</b><span>Estructura con alma</span></div>
+    <ol class="steps" id="steps">
+      <li data-s="1">Giro</li><li data-s="2">Tareas</li><li data-s="3">Resultado</li>
+    </ol>
   </div>
-</main>
+
+  <!-- 0 · Intro -->
+  <section class="view" id="vIntro">
+    <div class="opening">
+      <div class="presencia" aria-hidden="true"></div>
+      <div class="txt">
+        <span class="eyebrow">Índice de Dependencia del Dueño</span>
+        <h1>¿Tu negocio trabaja para ti o tú trabajas para tu negocio?</h1>
+        <p class="lede">Marca las tareas que hoy pasan por tus manos y te decimos qué parte de tu negocio depende de ti, cuál es tu cuello de botella y cuántas horas puedes recuperar.</p>
+        <div class="promise">
+          <div><b class="num">6 min</b><span>para contestarlo</span></div>
+          <div><b>Gratis</b><span>sin registro</span></div>
+          <div><b>Al instante</b><span>ves tu resultado</span></div>
+        </div>
+        <button class="btn" type="button" id="startBtn">Medir mi negocio</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 · Giro -->
+  <section class="view" id="vGiro" hidden>
+    <div class="stack">
+      <span class="eyebrow">Paso 1 de 3</span>
+      <h2>¿A qué se dedica tu negocio?</h2>
+      <p class="lede">Te mostramos las tareas más comunes de tu giro. Después puedes agregar las tuyas.</p>
+    </div>
+    <div class="giros" id="giros"></div>
+    <div class="stack">
+      <span class="eyebrow">¿Cuántas personas trabajan contigo?</span>
+      <div class="chips" id="team"></div>
+    </div>
+    <button class="btn" type="button" id="toTasks" disabled>Continuar</button>
+  </section>
+
+  <!-- 2 · Tareas -->
+  <section class="view" id="vTasks" hidden>
+    <div class="stack">
+      <span class="eyebrow">Paso 2 de 3</span>
+      <h2>¿Qué pasa por tus manos cada semana?</h2>
+      <p class="lede">Marca las tareas que haces o que necesitan tu aprobación. En cada una elige qué tan escrita o delegada está y cuántas horas te quita.</p>
+    </div>
+    <div id="domainList" class="view" style="gap:30px"></div>
+    <div class="stack">
+      <span class="eyebrow">¿Falta alguna?</span>
+      <form class="custom" id="customForm" autocomplete="off">
+        <label class="f full">Tarea<input id="cName" placeholder="Ej. Abrir y cerrar caja" required></label>
+        <label class="f">Dominio<select id="cDom"></select></label>
+        <button class="btn ghost" type="submit">Agregar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 3 · Resultado -->
+  <section class="view" id="vResult" hidden>
+    <div class="stack">
+      <span class="eyebrow">Paso 3 de 3 · Tu resultado</span>
+      <h2 id="headline"></h2>
+    </div>
+    <div class="result">
+      <div class="score">
+        <span class="eyebrow">Índice de dependencia</span>
+        <div class="big num" id="idx">0<small>/100</small></div>
+        <span class="verdict" id="verdict"></span>
+        <p class="muted" id="idxNote" style="font-size:.9rem;max-width:34ch"></p>
+      </div>
+      <div class="stair">
+        <svg viewBox="0 0 340 182" role="img" aria-label="Autonomía por dominio" id="stairSvg"></svg>
+        <p class="cap">Qué parte de cada dominio ya funciona sin ti.</p>
+      </div>
+    </div>
+
+    <div class="panel accent" id="bottleneck"></div>
+
+    <div class="stack">
+      <span class="eyebrow">Donde más se te va el tiempo</span>
+      <ol class="ranking" id="ranking"></ol>
+    </div>
+
+    <div class="stack">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" id="shareBtn">Copiar mi resultado</button>
+        <button class="linkbtn" type="button" id="backBtn">Ajustar mis tareas</button>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+
+    <!-- Registro: solo para el plan de 30 días -->
+    <div class="panel" id="gatePanel">
+      <span class="eyebrow">Siguiente paso</span>
+      <h2>Recibe tu plan de liberación de 30 días</h2>
+      <p class="muted">Un plan semana por semana, armado con tus tres tareas que más te atan, para que dejen de depender de ti.</p>
+      <form class="gate" id="gate" name="plan-30-dias" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="plan-30-dias">
+        <p class="hp"><label>No llenar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <label class="f">Nombre<input id="gName" name="nombre" required autocomplete="given-name"></label>
+        <label class="f">WhatsApp (10 dígitos)<input id="gTel" name="whatsapp" type="tel" inputmode="numeric" required autocomplete="tel-national" placeholder="477 000 0000"></label>
+        <label class="f">Correo (opcional)<input id="gMail" name="correo" type="email" autocomplete="email"></label>
+        <label class="f">Nombre del negocio (opcional)<input id="gBiz" name="negocio" autocomplete="organization"></label>
+        <input type="hidden" name="giro"><input type="hidden" name="equipo"><input type="hidden" name="indice">
+        <input type="hidden" name="horas_dueno"><input type="hidden" name="horas_recuperables"><input type="hidden" name="cuello_botella">
+        <input type="hidden" name="semaforo"><input type="hidden" name="tareas">
+        <label class="consent full"><input type="checkbox" id="gOk" name="acepta_aviso" value="si" required><span>Leí y acepto el <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener">aviso de privacidad</a>. Scalla puede contactarme para dar seguimiento a mi plan.</span></label>
+        <label class="consent full"><input type="checkbox" id="gInv" name="acepta_invitaciones" value="si"><span>Quiero recibir invitaciones a talleres y contenido de Scalla (opcional).</span></label>
+        <p class="err full" id="gErr" role="alert"></p>
+        <button class="btn gold full" type="submit" id="gBtn" style="justify-self:start">Quiero mi plan de 30 días</button>
+      </form>
+    </div>
+
+    <!-- Plan desbloqueado -->
+    <section class="view" id="planBox" hidden style="gap:18px">
+      <div class="stack">
+        <span class="eyebrow" id="planFor">Tu plan</span>
+        <h2>30 días para que tu negocio dependa menos de ti</h2>
+      </div>
+      <div id="plan"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" id="copyPlan">Copiar plan</button>
+      </div>
+      <div class="panel accent">
+        <h3>¿Quieres hacerlo acompañado?</h3>
+        <p class="muted">Agenda una Sesión de Claridad de 30 minutos. Revisamos tu resultado y definimos por dónde empezar.</p>
+        <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">Agendar por WhatsApp</a>
+        <p class="contact">O escribe directo al <b>477 153 4134</b></p>
+      </div>
+    </section>
+  </section>
+
+  <footer class="close">
+    <q>Automatizar el desorden solo vuelve el desorden más rápido.</q>
+    <p>¿Aún no sabes qué parte de tu negocio ordenar primero? Haz el <a href="/autodiagnostico/" style="color:var(--slate)">Autodiagnóstico de Ascenso</a>.</p>
+    <p>Las horas son una estimación del método Scalla: cada nivel indica qué parte de esas horas sigue costándote a ti (en tu cabeza 100 %, escrito 85 %, delegado 30 %, sin ti 0 %). © Scalla Consulting · scallaconsulting.com</p>
+  </footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="in">
+    <span class="cnt"><b id="barN" class="num">0</b> tareas · <span id="barH" class="num">0</span> h/sem</span>
+    <button class="btn" type="button" id="toResult" disabled>Marca al menos 3</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ===== Configuración ===== */
+  const SITE_URL="https://herramientas.scallaconsulting.com/indice/";
+  const WA_NUMBER="524771534134";
+  const PRIVACY_URL="https://scallaconsulting.com/aviso-de-privacidad/";
+
+  const DOMAINS=["Claridad Estratégica","Arquitectura de Crecimiento","Activación y Cultura","Escalabilidad Consciente"];
+  const SHORT=["Claridad","Arquitectura","Activación","Escalabilidad"];
+  const QUEST=["¿Hacia dónde va el negocio y quién decide?","¿Cómo se hace el trabajo para que salga igual cada vez?","¿Quién hace qué y cómo se coordina el equipo?","¿Qué te permite crecer sin que todo se rompa?"];
+  const LEVELS=["En mi cabeza","Escrito","Delegado","Sin mí"];
+  const LHELP=["Solo tú sabes hacerlo; nada está escrito.","Lo haces tú, pero existe el paso a paso.","Otra persona lo hace y tú revisas.","Funciona solo; un indicador te avisa."];
+  const W=[1,.85,.3,0];
+  const TEAM=["Solo yo","2 a 5","6 a 15","16 a 50","Más de 50"];
+
+  const UNIVERSAL=[
+    ["Fijar precios y aprobar descuentos",0,2],["Decidir en qué se invierte o se gasta",0,2],
+    ["Autorizar pagos a proveedores",1,2],["Resolver quejas o problemas de clientes",1,3],
+    ["Repartir prioridades del equipo",2,3],["Contratar y capacitar personal",2,2],
+    ["Revisar ventas, gastos y flujo de efectivo",3,2],["Publicar en redes sociales",3,3]
+  ];
+  const GIROS=[
+    {id:"comercio",n:"Comercio y distribución",s:"Tienda, mayoreo, ruta",t:[["Elegir qué productos comprar y vender",0,2],["Controlar inventario y pedidos a proveedores",1,4],["Cubrir turnos de mostrador o ruta",2,3],["Dar seguimiento a clientes frecuentes",3,2]]},
+    {id:"alimentos",n:"Alimentos y bebidas",s:"Restaurante, cafetería, cocina",t:[["Definir el menú y costear platillos",0,2],["Comprar insumos y controlar mermas",1,4],["Armar los roles de cocina y piso",2,2],["Revisar reseñas y ventas por platillo",3,1]]},
+    {id:"servicios",n:"Servicios profesionales",s:"Despacho, agencia, consultoría",t:[["Cerrar ventas con clientes nuevos",0,4],["Elaborar cotizaciones y propuestas",1,4],["Revisar el trabajo antes de entregarlo",2,4],["Cobranza y seguimiento de facturas",3,2]]},
+    {id:"salud",n:"Salud y bienestar",s:"Consultorio, clínica, gimnasio, estudio",t:[["Definir paquetes, membresías o tarifas",0,1],["Manejar la agenda de citas o reservas",1,4],["Coordinar horarios de especialistas o instructores",2,2],["Dar seguimiento a pacientes o socios",3,2]]},
+    {id:"belleza",n:"Belleza y cuidado personal",s:"Salón, barbería, spa",t:[["Elegir servicios y productos a la venta",0,1],["Agendar y confirmar citas",1,3],["Cubrir ausencias del equipo",2,2],["Recuperar clientes que no regresan",3,2]]},
+    {id:"manufactura",n:"Manufactura y taller",s:"Calzado, piel, metalmecánica",t:[["Aceptar pedidos y comprometer fechas",0,3],["Programar producción y revisar calidad",1,6],["Asignar operarios a cada línea o pedido",2,3],["Revisar costos de producción y desperdicio",3,2]]},
+    {id:"construccion",n:"Construcción e instalación",s:"Obra, mantenimiento, instalaciones",t:[["Cotizar y aceptar proyectos",0,4],["Programar cuadrillas y materiales",1,5],["Supervisar el trabajo en sitio",2,6],["Controlar avance y costo por proyecto",3,2]]},
+    {id:"educacion",n:"Educación y capacitación",s:"Escuela, academia, cursos",t:[["Diseñar la oferta de cursos y precios",0,2],["Llevar inscripciones y pagos",1,3],["Coordinar maestros y suplencias",2,2],["Atraer alumnos y medir permanencia",3,2]]},
+    {id:"otro",n:"Otro giro",s:"Empiezo con tareas generales",t:[]}
+  ];
+
+  /* ===== Estado ===== */
+  const KEY="scalla-indice-publico-v1";
+  let S={view:"intro",giro:null,team:null,tasks:[],lead:false,checks:{}};
+  try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.view)S=Object.assign(S,s);}catch(e){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+  const $=id=>document.getElementById(id);
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const fmt=n=>(Math.round(n*10)/10).toLocaleString("es-MX");
+  const giroObj=()=>GIROS.find(g=>g.id===S.giro);
+
+  function buildTasks(){
+    const g=giroObj();let k=0;
+    const mk=(a,src)=>({id:src+(k++),n:a[0],d:a[1],h:a[2],l:0,on:false});
+    const list=[...g.t.map(a=>mk(a,"g")),...UNIVERSAL.map(a=>mk(a,"u"))];
+    S.tasks=list.sort((a,b)=>a.d-b.d);
+  }
+  const picked=()=>S.tasks.filter(t=>t.on);
+  function stats(list){
+    const tot=list.reduce((a,t)=>a+t.h,0),own=list.reduce((a,t)=>a+t.h*W[t.l],0);
+    const next=list.reduce((a,t)=>a+t.h*W[Math.min(3,t.l+1)],0);
+    return {tot,own,gain:own-next,idx:tot?Math.round(own/tot*100):0};
+  }
+  const ranked=list=>list.filter(t=>t.l<3).sort((a,b)=>b.h*W[b.l]-a.h*W[a.l]||a.l-b.l);
+  const SEM={r:{n:"Rojo",c:"v-high",v:"Tú eres la operación",meta:"Que tu negocio aguante un día completo sin ti."},
+             a:{n:"Amarillo",c:"v-mid",v:"Estructura en construcción",meta:"Soltar dos o tres tareas con una revisión semanal, no diaria."},
+             v:{n:"Verde",c:"v-low",v:"Va camino a funcionar sin ti",meta:"Tomar una semana fuera sin que te llamen."}};
+  const sem=i=>i>=70?"r":i>=40?"a":"v";
+  const solo=()=>S.team==="Solo yo";
+
+  /* ===== Vistas ===== */
+  const VIEWS={intro:"vIntro",giro:"vGiro",tasks:"vTasks",result:"vResult"};
+  function go(v,scroll=true){
+    S.view=v;Object.entries(VIEWS).forEach(([k,id])=>$(id).hidden=k!==v);
+    const n={intro:0,giro:1,tasks:2,result:3}[v];
+    document.querySelectorAll("#steps li").forEach(li=>{const s=+li.dataset.s;li.classList.toggle("done",s<n);li.toggleAttribute("aria-current",s===n);if(s===n)li.setAttribute("aria-current","step");});
+    $("bar").hidden=v!=="tasks";
+    if(v==="giro")renderGiro();
+    if(v==="tasks"){renderDomains();renderBar();}
+    if(v==="result")renderResult();
+    save();if(scroll)window.scrollTo({top:0,behavior:"auto"});
+  }
+
+  function renderGiro(){
+    $("giros").innerHTML=GIROS.map(g=>`<button class="giro" type="button" data-g="${g.id}" aria-pressed="${S.giro===g.id}"><b>${g.n}</b><span>${g.s}</span></button>`).join("");
+    $("team").innerHTML=TEAM.map(t=>`<button class="chip" type="button" data-t="${t}" aria-pressed="${S.team===t}">${t}</button>`).join("");
+    $("toTasks").disabled=!(S.giro&&S.team);
+  }
+
+  function rowHTML(t){
+    return `<div class="row" data-id="${t.id}">
+      <button class="pick" type="button" aria-pressed="${t.on}"><span class="box" aria-hidden="true"></span><span class="nm">${esc(t.n)}</span>${t.id[0]==="c"?'<span class="tag">tuya</span>':""}</button>
+      ${t.on?`<div class="detail">
+        <span class="lbl">¿Qué tan escrita o delegada está?</span>
+        <div class="levels" role="group" aria-label="Nivel: ${esc(t.n)}">${LEVELS.map((L,l)=>`<button type="button" data-l="${l}" aria-pressed="${t.l===l}">${L}</button>`).join("")}</div>
+        <span class="lvlhelp">${LHELP[t.l]}</span>
+        <span class="lbl">Horas que te quita a la semana</span>
+        <div class="stepper"><button type="button" data-h="-1" aria-label="Menos horas">−</button><output class="num">${fmt(t.h)} h/sem</output><button type="button" data-h="1" aria-label="Más horas">+</button></div>
+      </div>`:""}
+    </div>`;
+  }
+  function renderDomains(){
+    $("domainList").innerHTML=DOMAINS.map((d,i)=>`<div class="domain"><header><span class="k">Dominio ${i+1} · ${d}</span><span class="q">${QUEST[i]}</span></header>
+      ${S.tasks.filter(t=>t.d===i).map(rowHTML).join("")}</div>`).join("");
+  }
+  function renderBar(){
+    const p=picked(),st=stats(p);
+    $("barN").textContent=p.length;$("barH").textContent=fmt(st.tot);
+    const b=$("toResult");b.disabled=p.length<3;b.textContent=p.length<3?`Marca al menos ${3-p.length} más`:"Ver mi resultado";
+  }
+
+  function renderStair(list){
+    const base=148,w=70,gap=16,H=[44,72,100,128];let out="";
+    DOMAINS.forEach((d,i)=>{
+      const st=stats(list.filter(t=>t.d===i));const a=st.tot?1-st.own/st.tot:0;const x=4+i*(w+gap);const fh=H[i]*a;
+      out+=`<rect class="s-out" x="${x}" y="${base-H[i]}" width="${w}" height="${H[i]}" rx="2"/><rect class="s-fill" x="${x}" y="${base-fh}" width="${w}" height="${fh}" rx="2"/>`;
+      out+=`<text class="s-pct" x="${x+w/2}" y="${base-H[i]-8}" text-anchor="middle">${st.tot?Math.round(a*100)+"%":"—"}</text><text class="s-lab" x="${x+w/2}" y="${base+18}" text-anchor="middle">${SHORT[i]}</text>`;
+    });
+    $("stairSvg").innerHTML=out;
+  }
+  const MOVE=["<b>Escríbela esta semana.</b> Grábate 10 minutos haciéndola y convierte la grabación en un checklist de una página.",
+    "<b>Entrégala.</b> Ya tiene paso a paso: asígnala a alguien y revisen juntos solo los primeros tres ciclos.",
+    "<b>Cambia la revisión por un indicador.</b> Define una señal que te diga que salió bien sin que tengas que mirarla."];
+
+  function renderResult(){
+    const p=picked(),st=stats(p),r=ranked(p);
+    $("headline").textContent=`Tu negocio depende ${st.idx} % de ti`;
+    $("idx").innerHTML=`${st.idx}<small>/100</small>`;
+    const v=$("verdict"),k=sem(st.idx);
+    v.className="verdict "+SEM[k].c;
+    v.innerHTML=`<span class="sem" aria-hidden="true"><i class="r ${k==="r"?"on":""}"></i><i class="a ${k==="a"?"on":""}"></i><i class="v ${k==="v"?"on":""}"></i></span>Semáforo ${SEM[k].n.toLowerCase()} · ${SEM[k].v}`;
+    $("idxNote").innerHTML=`${fmt(st.own)} de las ${fmt(st.tot)} horas semanales que marcaste siguen necesitando tu presencia.`+(S.prevIdx!=null&&S.prevIdx!==st.idx?`<br><span class="delta">Antes: ${S.prevIdx}. ${S.prevIdx>st.idx?`Bajaste ${S.prevIdx-st.idx} puntos.`:`Subió ${st.idx-S.prevIdx} puntos.`}</span>`:"");
+    renderStair(p);
+    const c=r[0];
+    $("bottleneck").innerHTML=c?`<span class="eyebrow">Tu cuello de botella</span><h3 style="font-size:1.55rem">${esc(c.n)}</h3>
+      <span class="muted" style="font-size:.82rem">${DOMAINS[c.d]} · ${fmt(c.h)} h/sem · ${LEVELS[c.l].toLowerCase()}</span><p>${MOVE[c.l]}</p>
+      <div class="returns"><div><span class="n num">${fmt(c.h*(W[c.l]-W[c.l+1]))} h</span><span class="l">vuelven cada semana con este paso</span></div>
+      <div><span class="n num">${fmt(st.gain)} h</span><span class="l">si todo sube un nivel</span></div>
+      <div><span class="n num">${Math.round(st.gain*48).toLocaleString("es-MX")} h</span><span class="l">al año (48 semanas)</span></div></div>`
+      :`<span class="eyebrow">Tu cuello de botella</span><h3>Ninguno: lo que marcaste ya funciona sin ti.</h3>`;
+    $("ranking").innerHTML=r.slice(0,5).map(t=>`<li><span>${esc(t.n)}</span><span>${fmt(t.h*W[t.l])} h tuyas</span></li>`).join("")||`<li><span>Nada pendiente</span><span></span></li>`;
+    $("gatePanel").hidden=S.lead;$("planBox").hidden=!S.lead;
+    if(S.lead)renderPlan();
+  }
+
+  /* ===== Plan de 30 días: semáforo × giro × tus tareas ===== */
+  const BASE={
+    r:["Saca de tu cabeza","Elige quién y entrena","Tu primer día fuera","Mide y repite"],
+    a:["Termina de escribir","Entrega con acompañamiento","Revisión semanal, no diaria","Mide y elige las siguientes"],
+    v:["Define tus indicadores","Cambia la revisión por el tablero","Simulacro: tres días sin ti","Planea tu semana fuera"],
+    s:["Audita tu tiempo","Elimina y simplifica","Automatiza o terceriza una","Mide y decide tu primera contratación"]};
+  const EXTRA={
+    r:["Anota durante la semana cada pregunta que te hacen y que solo tú sabes contestar.","Agenda 30 minutos con la persona elegida para hacer juntos la primera tarea.","Elige un día de la semana 4 para no estar disponible medio día. Avísale al equipo desde hoy.","Haz tu día fuera. Al regresar, anota qué se atoró: eso es lo siguiente que hay que escribir."],
+    a:["Revisa que cada tarea que ya está escrita tenga dueño y respaldo.","Acompaña sin hacerlo tú: si algo sale mal, corrige el checklist, no la tarea.","Fija un día y hora para revisar resultados. Fuera de esa revisión, no intervienes.","Cuenta cuántas veces te consultaron esta semana y elige las siguientes tres tareas."],
+    v:["Elige tres números que te digan si fue una buena semana sin preguntar a nadie.","Pide al equipo que te reporte esos números en un solo mensaje semanal.","Desconéctate tres días hábiles. Solo contestas si un número sale de rango.","Pon fecha a tu semana fuera y deja escrito quién decide qué mientras no estás."],
+    s:["Durante una semana anota en qué se te van las horas. Marca cada tarea con E (eliminar), A (automatizar) o T (tercerizar).","Deja de hacer una tarea que no cambia el resultado para tu cliente.","Automatiza una tarea repetitiva (respuestas, agenda, cobros) o contrata a alguien por horas para ella.","Suma las horas recuperadas y decide qué tarea sería la primera de una futura contratación."]};
+  const GT={
+    comercio:["Lista de las 10 preguntas que más te hace tu equipo de mostrador","Política de descuentos y devoluciones en una hoja","Checklist de apertura y cierre de caja","Tablero semanal: ventas, margen y productos que no rotan"],
+    alimentos:["Ficha de receta costeada, con gramajes y costo por plato","Checklist de apertura y cierre de cocina y piso","Lista base de compras con proveedor y punto de reorden","Tablero semanal: ventas, merma y costo de insumos"],
+    servicios:["Banco de respuestas a las 10 dudas más comunes de tus clientes","Plantilla de propuesta y cotización","Checklist de revisión de calidad antes de entregar","Tablero semanal: propuestas enviadas, cerradas y por cobrar"],
+    salud:["Protocolo de agenda: confirmar, reagendar y cancelar","Guion de bienvenida para pacientes o socios nuevos","Checklist de apertura y limpieza por turno","Tablero semanal: ocupación, inasistencias y renovaciones"],
+    belleza:["Guion para confirmar citas por WhatsApp","Catálogo de servicios con tiempos y precios","Protocolo para cubrir ausencias del equipo","Tablero semanal: ocupación por persona y clientes que regresan"],
+    manufactura:["Hoja de liberación de calidad por pedido","Programa de producción visible para todos","Instructivo de puesto para la operación más crítica","Tablero semanal: pedidos a tiempo, retrabajos y desperdicio"],
+    construccion:["Checklist de arranque de obra","Reporte diario de avance con foto","Lista de materiales por tipo de proyecto","Tablero semanal: avance contra programa y costo por proyecto"],
+    educacion:["Calendario de inscripciones y pagos","Protocolo de suplencias","Guion de seguimiento a prospectos de inscripción","Tablero semanal: inscritos, bajas y cobranza"],
+    otro:["Lista de las 10 preguntas que más te hace tu equipo","Plantilla de checklist de una página","Tabla de quién hace qué, con responsable y respaldo","Tablero semanal con tres números que te digan si fue una buena semana"]};
+  function stepsFor(t){
+    const q=`«${t.n}»`;
+    if(t.d===0){ // decisiones de rumbo: no se delegan completas, se ponen en criterios
+      const d=[`Escribe los criterios con los que decides ${q}: montos, límites y excepciones.`,
+               solo()?`Usa esos criterios para decidir ${q} en un bloque fijo a la semana, no cada vez que surge.`:`Define hasta qué monto o en qué casos alguien más puede decidir ${q} sin consultarte.`,
+               `Revisa una vez por semana solo las excepciones de ${q}.`];
+      return d.slice(Math.min(t.l,2));
+    }
+    if(solo()) return [`Decide si ${q} se elimina, se automatiza o se terceriza.`,`Aplica la decisión a ${q} y mide cuántas horas te devuelve.`];
+    const all=[
+      `Grábate 10 minutos haciendo ${q} y convierte la grabación en un checklist de una página.`,
+      `Elige quién hará ${q}. Háganla juntos una vez con el checklist y corrige donde se atore.`,
+      `Deja que esa persona haga ${q} sola. Revisa el resultado, no el proceso.`,
+      `Define un indicador para ${q} (tiempo, errores o quejas) y revísalo una vez por semana.`];
+    return all.slice(t.l);
+  }
+  function buildPlan(){
+    const st=stats(picked()),k=solo()?"s":sem(st.idx),top=ranked(picked()).slice(0,3),tools=GT[S.giro]||GT.otro;
+    const w=[[],[],[],[]];
+    top.forEach(t=>stepsFor(t).slice(0,3).forEach((x,i)=>w[Math.min(2,i)].push(x)));
+    return {k,meta:k==="s"?"Recuperar horas eliminando, automatizando o tercerizando lo que hoy haces tú.":SEM[k].meta,
+      weeks:BASE[k].map((title,i)=>({t:title,a:[...w[i],EXTRA[k][i]],tool:tools[i]}))};
+  }
+  function renderPlan(){
+    const pl=buildPlan(),st=stats(picked());
+    $("planFor").textContent=(S.leadName?`Plan de ${S.leadName}`:"Tu plan")+(pl.k==="s"?" · Trabajas solo":` · Semáforo ${SEM[pl.k].n.toLowerCase()}`);
+    const waMsg=t=>`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t)}`;
+    $("plan").innerHTML=`<p class="meta-goal">Meta del mes: ${esc(pl.meta)}</p>`+pl.weeks.map((w,wi)=>`<div class="week"><span class="wn num">S${wi+1}</span><div><h3>${esc(w.t)}</h3>
+      ${w.a.map((a,ai)=>{const k=wi+"-"+ai;return `<label><input type="checkbox" id="pc${k}" data-k="${k}" ${S.checks[k]?"checked":""}><span>${esc(a)}</span></label>`}).join("")}
+      <p class="tool-w"><b>Herramienta de la semana:</b> ${esc(w.tool)}.</p>
+      ${wi===1?`<div class="touch"><span>¿Te atoraste? Una Sesión de Claridad de 30 minutos, sin costo, para destrabar tu plan.</span><a class="btn ghost" target="_blank" rel="noopener" href="${waMsg(`Hola, estoy en la semana 2 de mi plan del Índice de Dependencia (índice ${st.idx}) y me atoré. Quiero una Sesión de Claridad.`)}">Pedir mi sesión por WhatsApp</a></div>`:""}
+      ${wi===3?`<div class="touch"><span>Al terminar el mes, vuelve a medir tu índice y compara.</span><button class="btn ghost" type="button" id="remeasure">Volver a medir mi índice</button></div>`:""}
+      </div></div>`).join("");
+    const r=$("remeasure");if(r)r.onclick=()=>{S.prevIdx=stats(picked()).idx;go("tasks");};
+    $("waBtn").href=waMsg(`Hola, hice el Índice de Dependencia de Scalla: mi negocio depende ${st.idx} % de mí (semáforo ${SEM[sem(st.idx)].n.toLowerCase()}). Quiero agendar una Sesión de Claridad.`);
+  }
+
+  /* ===== Eventos ===== */
+  $("startBtn").onclick=()=>go("giro");
+  $("giros").addEventListener("click",e=>{const b=e.target.closest(".giro");if(!b)return;if(S.giro!==b.dataset.g){S.giro=b.dataset.g;buildTasks();S.lead=false;}renderGiro();save();});
+  $("team").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;S.team=b.dataset.t;renderGiro();save();});
+  $("toTasks").onclick=()=>{if(!S.tasks.length)buildTasks();go("tasks");};
+  $("domainList").addEventListener("click",e=>{
+    const row=e.target.closest(".row");if(!row)return;const t=S.tasks.find(x=>x.id===row.dataset.id);let focusSel=null;
+    if(e.target.closest(".pick")){t.on=!t.on;focusSel=".pick";}
+    else if(e.target.closest(".levels button")){t.l=+e.target.closest("button").dataset.l;focusSel=`.levels button[data-l="${t.l}"]`;}
+    else if(e.target.closest("[data-h]")){const d=+e.target.closest("[data-h]").dataset.h;t.h=Math.min(40,Math.max(.5,t.h+(t.h<=1&&d<0?-.5:d)));if(t.h>1&&t.h%1)t.h=Math.round(t.h);focusSel=`[data-h="${d}"]`;}
+    else return;
+    row.outerHTML=rowHTML(t);
+    const nr=document.querySelector(`.row[data-id="${t.id}"] ${focusSel}`);if(nr)nr.focus();
+    renderBar();save();
+  });
+  $("cDom").innerHTML=DOMAINS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
+  $("customForm").addEventListener("submit",e=>{e.preventDefault();const n=$("cName").value.trim();if(!n)return;
+    S.tasks.push({id:"c"+Date.now(),n,d:+$("cDom").value,h:2,l:0,on:true});$("cName").value="";renderDomains();renderBar();save();});
+  $("toResult").onclick=()=>go("result");
+  $("backBtn").onclick=()=>go("tasks");
+
+  function copy(txt,ok){
+    const fb=()=>{const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
+      try{document.execCommand("copy");flash(ok);}catch(e){flash("No se pudo copiar. Selecciona el texto manualmente.");}ta.remove();};
+    try{navigator.clipboard.writeText(txt).then(()=>flash(ok),fb);}catch(e){fb();}
+  }
+  let tt;function flash(m){$("toast").textContent=m;clearTimeout(tt);tt=setTimeout(()=>$("toast").textContent="",3500);}
+  $("shareBtn").onclick=()=>{const st=stats(picked());
+    copy(`Mi negocio depende ${st.idx} % de mí (semáforo ${SEM[sem(st.idx)].n.toLowerCase()}): ${fmt(st.own)} horas a la semana pasan por mis manos. ¿Y el tuyo? Mídelo gratis en 6 minutos: ${SITE_URL}`,"Resultado copiado. Pégalo en WhatsApp y mándaselo a tu socio.");};
+  $("copyPlan").onclick=()=>{const pl=buildPlan();
+    copy(`Meta del mes: ${pl.meta}\n\n`+pl.weeks.map((w,i)=>`Semana ${i+1}: ${w.t}\n`+w.a.map(a=>"• "+a).join("\n")+`\nHerramienta: ${w.tool}`).join("\n\n")+`\n\nÍndice de Dependencia · Scalla Consulting · ${SITE_URL}`,"Plan copiado.");};
+  $("plan").addEventListener("change",e=>{if(e.target.dataset.k){S.checks[e.target.dataset.k]=e.target.checked;save();}});
+
+
+  $("gate").addEventListener("submit",async e=>{
+    e.preventDefault();const f=e.target;const err=$("gErr");
+    const tel=$("gTel").value.replace(/\D/g,"").replace(/^52/,"");
+    if(!$("gName").value.trim()){err.textContent="Escribe tu nombre.";$("gName").focus();return;}
+    if(tel.length!==10){err.textContent="Escribe tu WhatsApp a 10 dígitos, sin lada internacional.";$("gTel").focus();return;}
+    if($("gMail").value&&!$("gMail").checkValidity()){err.textContent="Revisa tu correo o déjalo vacío.";$("gMail").focus();return;}
+    if(!$("gOk").checked){err.textContent="Para recibir tu plan, acepta el aviso de privacidad.";return;}
+    err.textContent="";
+    const p=picked(),st=stats(p),c=ranked(p)[0];
+    const set=(n,v)=>f.elements[n].value=v;
+    set("whatsapp",tel);set("giro",giroObj().n);set("equipo",S.team);set("indice",st.idx);set("horas_dueno",fmt(st.own));
+    set("horas_recuperables",fmt(st.gain));set("cuello_botella",c?c.n:"—");set("semaforo",SEM[sem(st.idx)].n);
+    set("tareas",p.map(t=>`${t.n} [${SHORT[t.d]} · ${LEVELS[t.l]} · ${t.h}h]`).join(" | "));
+    $("gBtn").disabled=true;$("gBtn").textContent="Preparando tu plan…";
+    let ok=true;
+    try{const r=await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(f)).toString()});ok=r.ok;}catch(x){ok=false;}
+    S.lead=true;S.leadName=$("gName").value.trim().split(" ")[0];save();renderResult();
+    if(!ok)flash("Tu plan está listo. No pudimos registrar tus datos; si quieres seguimiento, escríbenos al 477 153 4134.");
+    $("planBox").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+
+  if(S.view==="tasks"&&!S.tasks.length)S.view="giro";
+  if(S.view==="result"&&picked().length<3)S.view=S.tasks.length?"tasks":"giro";
+  go(S.view,false);
+})();
+</script>
 </body>
 </html>
