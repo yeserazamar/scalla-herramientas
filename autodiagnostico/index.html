@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Autodiagnóstico de Ascenso · Scalla Consulting</title>
+<meta name="description" content="16 preguntas para descubrir qué parte de tu negocio debes ordenar primero según el Sistema de Ascenso Empresarial. Gratis, resultado al instante.">
+<meta property="og:title" content="Autodiagnóstico de Ascenso">
+<meta property="og:description" content="16 preguntas. Descubre qué parte de tu negocio debes ordenar primero.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://herramientas.scallaconsulting.com/autodiagnostico/">
+<meta property="og:site_name" content="Scalla Consulting">
+<meta property="og:locale" content="es_MX">
+<meta property="og:image" content="https://scallaconsulting.com/img/og-scalla.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Autodiagnóstico de Ascenso · Scalla Consulting">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://herramientas.scallaconsulting.com/autodiagnostico/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#23211E; --fondo:#FAF8F4; --oro:#BC8A34; --pizarra:#4A6B5A; --pizarra-hondo:#3A5647; --hueso:#F2EEE6;
+  --tenue:#6E675D; --linea:rgba(35,33,30,.16); --suave:rgba(35,33,30,.07);
+  --blanco:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--fondo); color:var(--tinta);
+  font-size:16px; line-height:1.6;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:660px;margin:0 auto;padding:0 22px}
+.serif{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300}
+
+/* barra superior */
+.top{position:sticky;top:0;z-index:20;background:var(--fondo);
+  padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--suave)}
+.top-in{max-width:660px;margin:0 auto;padding:14px 22px;display:flex;justify-content:space-between;align-items:center}
+.marca{font-size:12px;letter-spacing:.2em;font-weight:600}
+.marca span{color:var(--oro)}
+.paso{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue)}
+.barra{height:2px;background:var(--suave)}
+.barra i{display:block;height:2px;background:var(--oro);width:0;transition:width .35s ease}
+
+/* portada */
+.hero{padding:46px 0 40px}
+.eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--pizarra);font-weight:500}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;
+  font-size:clamp(38px,9vw,56px);line-height:1.03;margin-top:16px;letter-spacing:-.01em}
+h1 em{font-style:italic;color:var(--pizarra)}
+.lead{margin-top:22px;color:var(--tenue);font-size:17px}
+.regla{width:56px;height:3px;background:var(--oro);margin:28px 0}
+.meta{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
+.meta div{flex:0 0 auto}
+.meta .k{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pizarra);margin-bottom:3px}
+.meta .v{font-size:15px;font-weight:600}
+
+/* botones */
+.btn{display:inline-block;width:100%;text-align:center;border:0;cursor:pointer;
+  background:var(--tinta);color:#fff;font-family:inherit;font-size:16px;font-weight:600;
+  padding:17px 24px;border-radius:2px;transition:opacity .2s;-webkit-appearance:none;text-decoration:none}
+.btn:hover{opacity:.88}
+.btn.oro{background:var(--pizarra)}
+.btn.oro:hover,.btn.verde:hover{background:var(--pizarra-hondo);opacity:1}
+.btn.verde{background:var(--pizarra)}
+.btn.linea{background:transparent;color:var(--tinta);border:1px solid var(--linea);font-weight:500}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn-row{margin-top:30px;display:flex;flex-direction:column;gap:10px}
+
+/* preguntas */
+.pantalla{display:none;padding:34px 0 50px}
+.pantalla.on{display:block}
+.dominio-tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);font-weight:500}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;
+  font-size:clamp(28px,6.5vw,36px);line-height:1.12;margin-top:10px}
+.dominio-desc{color:var(--tenue);margin-top:10px;font-size:15px}
+.q{border-top:1px solid var(--suave);padding:22px 0}
+.q:first-of-type{margin-top:26px}
+.q-txt{font-size:16.5px;line-height:1.45;font-weight:500}
+.ops{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:15px}
+.op{position:relative}
+.op input{position:absolute;opacity:0;width:0;height:0}
+.op span{display:block;text-align:center;padding:11px 3px;border:1px solid var(--linea);
+  border-radius:2px;background:var(--blanco);cursor:pointer;font-size:12px;line-height:1.25;
+  color:var(--tenue);transition:all .15s;min-height:54px;display:flex;align-items:center;justify-content:center}
+.op input:checked + span{background:var(--tinta);color:#fff;border-color:var(--tinta);font-weight:600}
+.op input:focus-visible + span{outline:2px solid var(--pizarra);outline-offset:2px}
+
+.aviso{margin-top:18px;font-size:13.5px;color:var(--oro);display:none}
+.aviso.on{display:block}
+
+/* resultado */
+.nivel{background:var(--tinta);color:#fff;padding:34px 24px;margin:0 -22px 30px;position:relative}
+.nivel .eyebrow{color:var(--oro)}
+.nivel h2{color:#fff;margin-top:12px}
+.nivel p{color:#D9D3C7;margin-top:12px;font-size:15.5px}
+.marcador{font-family:"Cormorant Garamond",Georgia,serif;font-size:58px;line-height:1;color:var(--oro);margin-top:20px}
+.marcador small{font-size:17px;color:#D9D3C7;font-family:"DM Sans",sans-serif}
+
+.dom{padding:17px 0;border-bottom:1px solid var(--suave)}
+.dom-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.dom-nom{font-size:15.5px;font-weight:600}
+.dom-pts{font-size:13px;color:var(--tenue);white-space:nowrap}
+.track{height:5px;background:var(--suave);margin-top:9px;border-radius:3px;overflow:hidden}
+.track i{display:block;height:5px;background:var(--oro);width:0;transition:width .7s ease;border-radius:3px}
+.dom.debil .track i{background:var(--pizarra)}
+.flag{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--pizarra);font-weight:600;margin-top:7px}
+
+.caja{background:var(--blanco);border:1px solid var(--suave);border-left:3px solid var(--oro);padding:22px;margin-top:28px}
+.caja.verde{border-left-color:var(--pizarra)}
+.caja h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:24px;line-height:1.2}
+.caja .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);font-weight:600}
+.caja.verde .sub{color:var(--pizarra)}
+.acciones{list-style:none;margin-top:16px}
+.acciones li{position:relative;padding-left:20px;margin-bottom:11px;font-size:15px;color:var(--tinta);line-height:1.5}
+.acciones li:last-child{margin-bottom:0}
+.acciones li::before{content:"";position:absolute;left:0;top:10px;width:9px;height:2px;background:var(--oro)}
+
+/* formulario */
+.form{margin-top:34px;padding-top:28px;border-top:1px solid var(--linea)}
+
+.form label{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--tenue);font-weight:600;margin-bottom:6px;margin-top:14px}
+input[type=text],input[type=email]{width:100%;padding:13px 14px;border:1px solid var(--linea);
+  border-radius:2px;background:var(--blanco);font-family:inherit;font-size:16px;color:var(--tinta);-webkit-appearance:none}
+input:focus{outline:none;border-color:var(--pizarra)}
+.nota{font-size:13px;color:var(--tenue);margin-top:14px}
+.form label.check{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-weight:400;font-size:14px;color:var(--tenue);margin-top:16px;line-height:1.45;cursor:pointer}
+.form label.check input{margin-top:3px;accent-color:var(--pizarra);flex:none;width:16px;height:16px}
+.form label.check a{color:var(--pizarra);text-decoration:underline;text-underline-offset:2px}
+.ok{display:none;background:var(--blanco);border:1px solid var(--suave);border-left:3px solid var(--pizarra);padding:18px;margin-top:16px;font-size:15px}
+.ok.on{display:block}
+
+footer{border-top:1px solid var(--suave);margin-top:50px;padding:24px 0 40px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue)}
+
+@media(max-width:400px){
+  .ops{grid-template-columns:repeat(2,1fr)}
+  .meta{gap:18px}
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--fondo:#FAF8F4}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <a class="marca" href="https://scallaconsulting.com" style="color:inherit;text-decoration:none">SCALLA <span>·</span> CONSULTING</a>
+    <span class="paso" id="paso"></span>
+  </div>
+  <div class="barra"><i id="progreso"></i></div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════ PORTADA ═══════ -->
+<section class="pantalla on" id="p0">
+  <div class="hero">
+    <div class="eyebrow">Sistema de Ascenso Empresarial</div>
+    <h1>Autodiagnóstico<br><em>de Ascenso</em></h1>
+    <div class="regla"></div>
+    <p class="lead">Dieciséis preguntas para saber qué parte de tu negocio debes ordenar primero: en cuál de los cuatro dominios del Sistema de Ascenso está tu mayor oportunidad.</p>
+    <div class="meta">
+      <div><div class="k">Duración</div><div class="v">4 minutos</div></div>
+      <div><div class="k">Preguntas</div><div class="v">16</div></div>
+      <div><div class="k">Resultado</div><div class="v">Inmediato</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="ir(1)">Comenzar</button>
+    </div>
+    <p class="nota">Responde pensando en cómo opera tu negocio hoy, no en cómo te gustaría que operara. El valor del diagnóstico depende de eso.</p>
+  </div>
+</section>
+
+<!-- las pantallas de preguntas se generan por script -->
+<div id="preguntas"></div>
+
+<!-- ═══════ RESULTADO ═══════ -->
+<section class="pantalla" id="pr">
+  <div class="nivel">
+    <div class="eyebrow" id="r-eyebrow">Tu resultado</div>
+    <h2 id="r-nivel"></h2>
+    <p id="r-desc"></p>
+    <div class="marcador"><span id="r-pts"></span><small> / 64</small></div>
+  </div>
+
+  <div class="dominio-tag">Los cuatro dominios</div>
+  <div id="r-doms" style="margin-top:14px"></div>
+
+  <div class="caja verde">
+    <div class="sub">Empieza por aquí</div>
+    <h3 id="r-foco"></h3>
+    <ul class="acciones" id="r-acciones"></ul>
+  </div>
+
+  <div class="caja" style="border-left-color:var(--pizarra)">
+    <div class="sub" style="color:var(--pizarra)">Siguiente herramienta · gratis</div>
+    <h3 style="margin-top:4px">Ahora mide cuánto de esto pasa por ti</h3>
+    <p style="color:var(--tenue);margin-top:10px;font-size:15px">Ya sabes dónde está el desorden. El Índice de Dependencia del Dueño te dice cuántas horas a la semana te cuesta y qué tarea soltar primero.</p>
+    <div class="btn-row">
+      <a class="btn linea" href="/indice/">Medir mi Índice de Dependencia</a>
+    </div>
+  </div>
+
+  <div class="caja">
+    <div class="sub">Siguiente paso</div>
+    <h3 style="margin-top:4px">Hablemos de tu resultado</h3>
+    <p style="color:var(--tenue);margin-top:10px;font-size:15px">Veinte minutos por WhatsApp para revisar qué significa tu diagnóstico en tu caso concreto. Sin costo y sin compromiso.</p>
+    <div class="btn-row">
+      <a class="btn verde" id="r-wa" href="#" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- captura de correo · Netlify Forms -->
+  <form class="form" name="autodiagnostico" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="form">
+    <input type="hidden" name="form-name" value="autodiagnostico">
+    <p style="display:none"><label>No llenar <input name="bot-field"></label></p>
+    <div class="sub" style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);font-weight:600">Seguimiento personal</div>
+    <h3 class="serif" style="font-size:24px;margin-top:6px">Revisemos tu resultado juntos</h3>
+    <p style="color:var(--tenue);margin-top:8px;font-size:15px">Si prefieres que te busquemos, déjanos tus datos y te contactamos para platicar lo que significa tu diagnóstico.</p>
+    <label for="n">Nombre</label>
+    <input type="text" id="n" name="nombre" required autocomplete="name">
+    <label for="e">Correo</label>
+    <input type="email" id="e" name="email" required autocomplete="email">
+    <label for="emp">Empresa <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+    <input type="text" id="emp" name="empresa" autocomplete="organization">
+    <input type="hidden" name="puntaje" id="h-pts">
+    <input type="hidden" name="nivel" id="h-nivel">
+    <input type="hidden" name="dominio_debil" id="h-foco">
+    <input type="hidden" name="detalle" id="h-detalle">
+    <label class="check"><input type="checkbox" name="acepta_aviso" value="si" required><span>Leí y acepto el <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener">aviso de privacidad</a>.</span></label>
+    <label class="check"><input type="checkbox" name="acepta_invitaciones" value="si"><span>Quiero recibir invitaciones a talleres y contenido de Scalla (opcional).</span></label>
+    <div class="btn-row">
+      <button type="submit" class="btn linea">Enviar mis datos</button>
+    </div>
+    <p class="nota">Usamos tus datos para darte seguimiento. No los vendemos ni los compartimos para fines de terceros.</p>
+  </form>
+  <div class="ok" id="ok">Listo, recibimos tus datos. Te contactaremos pronto para revisar tu resultado contigo.</div>
+
+  <div class="btn-row">
+    <button class="btn linea" onclick="reiniciar()">Volver a empezar</button>
+  </div>
+</section>
+
+<footer>
+  <span>Scalla Consulting</span>
+  <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener" style="color:inherit">Aviso de privacidad</a>
+  <span>Estructura con alma</span>
+</footer>
+
+</div>
+
+<script>
+/* ══════════ CONFIGURACIÓN ══════════ */
+const WHATSAPP = '524771534134';   // sin signos ni espacios
+
+const DOMINIOS = [
+  {
+    id:'claridad',
+    nombre:'Claridad estratégica',
+    desc:'Qué negocio somos, qué prometemos y con qué criterio se decide.',
+    preguntas:[
+      'Mi equipo sabe qué clientes o trabajos debemos rechazar, sin preguntarme.',
+      'Tenemos por escrito qué le prometemos al cliente y qué no.',
+      'Cuando hay que decidir algo fuera de lo común, existe un criterio escrito y no solo mi opinión.',
+      'Si yo no estuviera un mes, el negocio sabría hacia dónde ir.'
+    ],
+    foco:'Claridad estratégica',
+    acciones:[
+      'Escribe en una hoja qué le prometes al cliente y, sobre todo, qué no. Compártela con tu equipo esta semana.',
+      'Toma las tres preguntas que más te hacen y escribe la regla con la que tú las resuelves.',
+      'Define en qué tres casos tu equipo debe rechazar un trabajo sin consultarte.'
+    ]
+  },
+  {
+    id:'arquitectura',
+    nombre:'Arquitectura de crecimiento',
+    desc:'Procesos, roles y flujo de decisiones que sostienen la operación.',
+    preguntas:[
+      'Los procesos clave están documentados, no solo en la cabeza de quien los hace.',
+      'Cada área tiene un responsable que responde por resultados, no solo por tareas.',
+      'Está definido quién decide qué, y hasta qué monto o alcance, sin consultarme.',
+      'Reviso indicadores que me dicen cómo va el negocio sin tener que estar presente.'
+    ],
+    foco:'Arquitectura de crecimiento',
+    acciones:[
+      'Elige la decisión que más veces te interrumpe y escríbele un límite con número: monto, plazo o alcance.',
+      'Documenta un solo proceso, el que más duele cuando falta la persona que lo sabe.',
+      'Define tres indicadores que puedas revisar una vez por semana en una hoja.'
+    ]
+  },
+  {
+    id:'activacion',
+    nombre:'Activación y cultura',
+    desc:'Criterio delegado, equipo que decide y aprende sin ti.',
+    preguntas:[
+      'Mi equipo toma decisiones y me informa después, en lugar de preguntarme antes.',
+      'Cuando alguien se equivoca, ajustamos el criterio o el proceso, no solo a la persona.',
+      'La gente nueva aprende de un sistema, no de que yo le explique.',
+      'Confío en cómo decide mi equipo, aunque no lo haga igual que yo.'
+    ],
+    foco:'Activación y cultura',
+    acciones:[
+      'Elige una decisión y acuerda que te la informen después, no antes. Sostenlo treinta días sin intervenir.',
+      'La próxima vez que algo salga mal, pregunta qué criterio faltaba antes de preguntar quién falló.',
+      'Pide a quien mejor hace una tarea que escriba cómo la hace. Esa es tu primera guía de inducción.'
+    ]
+  },
+  {
+    id:'escalabilidad',
+    nombre:'Escalabilidad consciente',
+    desc:'Crecer al ritmo que la estructura aguanta.',
+    preguntas:[
+      'Cuando entra más trabajo, el negocio lo absorbe sin que yo cargue más horas.',
+      'Crecer no significa que yo tenga que estar en más lugares.',
+      'Sé cuál es el límite de capacidad actual antes de aceptar más clientes.',
+      'Puedo ausentarme una semana completa sin que algo se detenga.'
+    ],
+    foco:'Escalabilidad consciente',
+    acciones:[
+      'Calcula cuántos clientes o trabajos más aguanta tu operación actual antes de romperse. Ponle número.',
+      'Antes de aceptar el siguiente cliente grande, define quién lo atiende si tú no estás.',
+      'Agenda una ausencia de tres días en los próximos dos meses y prepara al equipo para ella.'
+    ]
+  }
+];
+
+const ESCALA = ['Nunca','A veces','Casi siempre','Siempre'];
+
+const NIVELES = [
+  { max:31, nombre:'Operación dependiente',
+    desc:'Hoy tu negocio no puede funcionar sin ti. No es falta de esfuerzo: es que casi todo el criterio vive en tu cabeza y no en la estructura. Es el punto de partida más común, y también el que más rápido mejora.' },
+  { max:43, nombre:'Estructura en formación',
+    desc:'Ya hay piezas ordenadas, pero conviven con zonas donde todo sigue pasando por ti. El riesgo en esta etapa es crecer antes de cerrar esas zonas, porque el crecimiento te devuelve a la operación.' },
+  { max:55, nombre:'Negocio con estructura',
+    desc:'Tu negocio opera sin depender de tu presencia diaria. Lo que sigue no es ordenar más, sino decidir hasta dónde quieres crecer y preparar la estructura para ese tamaño.' },
+  { max:64, nombre:'En ascenso',
+    desc:'Tu negocio es un activo, no un empleo que te pagas. El trabajo ahora está en sostener el criterio conforme entra gente nueva y en no perder la claridad que te trajo hasta aquí.' }
+];
+
+/* ══════════ CONSTRUCCIÓN ══════════ */
+const TOTAL = DOMINIOS.length;
+let paso = 0;
+const resp = {};
+
+const cont = document.getElementById('preguntas');
+DOMINIOS.forEach((d, di) => {
+  const sec = document.createElement('section');
+  sec.className = 'pantalla';
+  sec.id = 'p' + (di + 1);
+  let html = `<div class="dominio-tag">Dominio ${di+1} de ${TOTAL}</div>
+    <h2>${d.nombre}</h2>
+    <p class="dominio-desc">${d.desc}</p>`;
+  d.preguntas.forEach((q, qi) => {
+    const name = `${d.id}_${qi}`;
+    html += `<div class="q"><div class="q-txt">${q}</div><div class="ops">`;
+    ESCALA.forEach((op, oi) => {
+      html += `<label class="op"><input type="radio" name="${name}" value="${oi+1}"><span>${op}</span></label>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `<div class="aviso" id="av${di+1}">Falta responder alguna pregunta de esta sección.</div>
+    <div class="btn-row">
+      <button class="btn" onclick="siguiente(${di+1})">${di === TOTAL-1 ? 'Ver mi resultado' : 'Continuar'}</button>
+      ${di > 0 ? `<button class="btn linea" onclick="ir(${di})">Regresar</button>` : ''}
+    </div>`;
+  sec.innerHTML = html;
+  cont.appendChild(sec);
+});
+
+document.querySelectorAll('input[type=radio]').forEach(r => {
+  r.addEventListener('change', e => { resp[e.target.name] = +e.target.value; });
+});
+
+/* ══════════ NAVEGACIÓN ══════════ */
+function ir(n){
+  document.querySelectorAll('.pantalla').forEach(s => s.classList.remove('on'));
+  document.getElementById(n === 'r' ? 'pr' : 'p' + n).classList.add('on');
+  paso = n;
+  const pct = n === 'r' ? 100 : (n / (TOTAL + 1)) * 100;
+  document.getElementById('progreso').style.width = pct + '%';
+  document.getElementById('paso').textContent =
+    n === 0 ? '' : (n === 'r' ? 'Resultado' : `Paso ${n} de ${TOTAL}`);
+  window.scrollTo({ top:0, behavior:'instant' });
+}
+
+function siguiente(n){
+  const d = DOMINIOS[n-1];
+  const faltan = d.preguntas.some((_, qi) => !resp[`${d.id}_${qi}`]);
+  const av = document.getElementById('av' + n);
+  if (faltan){ av.classList.add('on'); return; }
+  av.classList.remove('on');
+  if (n < TOTAL) ir(n + 1); else calcular();
+}
+
+function reiniciar(){
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  for (const k in resp) delete resp[k];
+  document.getElementById('form').style.display = '';
+  document.getElementById('ok').classList.remove('on');
+  ir(0);
+}
+
+/* ══════════ RESULTADO ══════════ */
+function calcular(){
+  const puntos = DOMINIOS.map(d =>
+    d.preguntas.reduce((s, _, qi) => s + (resp[`${d.id}_${qi}`] || 0), 0));
+  const total = puntos.reduce((a,b) => a+b, 0);
+  const nivel = NIVELES.find(n => total <= n.max);
+
+  let min = 0;
+  puntos.forEach((p,i) => { if (p < puntos[min]) min = i; });
+  const foco = DOMINIOS[min];
+
+  document.getElementById('r-nivel').textContent = nivel.nombre;
+  document.getElementById('r-desc').textContent = nivel.desc;
+  document.getElementById('r-pts').textContent = total;
+
+  const cajas = DOMINIOS.map((d,i) => `
+    <div class="dom ${i===min?'debil':''}">
+      <div class="dom-top">
+        <span class="dom-nom">${d.nombre}</span>
+        <span class="dom-pts">${puntos[i]} / 16</span>
+      </div>
+      <div class="track"><i style="width:${(puntos[i]/16)*100}%"></i></div>
+      ${i===min?'<span class="flag">Tu punto más débil</span>':''}
+    </div>`).join('');
+  document.getElementById('r-doms').innerHTML = cajas;
+
+  document.getElementById('r-foco').textContent = foco.foco;
+  document.getElementById('r-acciones').innerHTML =
+    foco.acciones.map(a => `<li>${a}</li>`).join('');
+
+  const detalle = DOMINIOS.map((d,i) => `${d.nombre}: ${puntos[i]}/16`).join(' · ');
+  const msg = `Hola, acabo de hacer el Autodiagnóstico de Ascenso.\n\n`
+    + `Resultado: ${total}/64 — ${nivel.nombre}\n`
+    + `${detalle}\n`
+    + `Mi punto más débil es ${foco.nombre}.\n\n`
+    + `Me gustaría platicar sobre esto.`;
+  document.getElementById('r-wa').href =
+    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+
+  document.getElementById('h-pts').value = total;
+  document.getElementById('h-nivel').value = nivel.nombre;
+  document.getElementById('h-foco').value = foco.nombre;
+  document.getElementById('h-detalle').value = detalle;
+
+  ir('r');
+  setTimeout(() => {
+    document.querySelectorAll('.track i').forEach((el,i) => {
+      el.style.width = (puntos[i]/16)*100 + '%';
+    });
+  }, 60);
+}
+
+/* envío del formulario sin recargar */
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  const datos = new URLSearchParams(new FormData(f)).toString();
+  const btn = f.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:datos })
+    .then(res => {
+      if (!res.ok) throw new Error(res.status);
+      f.style.display='none'; document.getElementById('ok').classList.add('on');
+    })
+    .catch(() => {
+      btn.disabled = false; btn.textContent = 'Enviar mis datos';
+      alert('No pudimos enviar tus datos. Inténtalo de nuevo o escríbenos por WhatsApp.');
+    });
+});
+
+ir(0);
+</script>
+</body>
+</html>
