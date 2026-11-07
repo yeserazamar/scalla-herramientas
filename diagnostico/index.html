@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diagnóstico de arranque · Scalla</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Cuestionario de diagnóstico previo a la propuesta de Scalla Consulting.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+/* Diagnóstico de arranque: una sección por pantalla, pensado para celular. Trazo Presencia abre, Reposo cierra. */
+:root{color-scheme:light;
+  --bg:#FAF8F4; --surface:#F2EEE6; --ink:#1A1A18; --carbon:#23211E; --muted:#6E6A62;
+  --line:#DDD7CB; --gold:#BC8A34; --gold-soft:#EADBBE; --slate:#4A6B5A; --warn:#A4532E; --onink:#FAF8F4;
+  --display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(16px + env(safe-area-inset-top,0px)) 130px}
+.app{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:600;color:var(--carbon);text-wrap:balance;margin:0;line-height:1.08}
+h1{font-size:clamp(2.1rem,8vw,3.1rem)}
+h2{font-size:clamp(1.7rem,6vw,2.1rem)}
+p{margin:0}
+a{color:var(--slate)}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.muted{color:var(--muted)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.view{display:flex;flex-direction:column;gap:24px}
+.stack{display:flex;flex-direction:column;gap:10px}
+
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand b{font-family:var(--display);font-size:1.35rem;font-weight:600;color:var(--carbon);letter-spacing:.02em}
+.brand span{font-size:.72rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.saved{font-size:.74rem;color:var(--slate);min-height:1em}
+.prog{height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s ease}
+
+.opening{display:grid;grid-template-columns:4px 1fr;gap:18px}
+.presencia{background:var(--carbon);border-radius:2px}
+.opening .txt{display:flex;flex-direction:column;gap:16px;min-width:0}
+.lede{color:var(--muted);max-width:58ch}
+.promise{display:flex;gap:0}
+.promise div{padding:0 12px;border-left:1px solid var(--line);display:flex;flex-direction:column}
+.promise div:first-child{padding-left:0;border-left:0}
+.promise b{font-family:var(--display);font-size:clamp(1.25rem,5vw,1.6rem);font-weight:600;color:var(--carbon);line-height:1.1}
+.promise span{font-size:.76rem;color:var(--muted)}
+.parts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.parts li{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.parts li:last-child{border-bottom:1px solid var(--line)}
+.parts .n{font-family:var(--display);font-size:1.8rem;font-weight:600;color:var(--gold);line-height:1}
+.parts b{font-weight:500;color:var(--carbon)}
+.parts span{display:block;font-size:.84rem;color:var(--muted)}
+
+.btn{border:1px solid var(--carbon);background:var(--carbon);color:var(--onink);padding:12px 20px;border-radius:3px;cursor:pointer;font-weight:500;font-size:.95rem;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--carbon)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1A1A18}
+.btn.wa{background:var(--slate);border-color:var(--slate);color:#fff}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Preguntas */
+.q{display:flex;flex-direction:column;gap:10px;padding:20px 0 4px;border-top:1px solid var(--line)}
+.qn{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.qt{font-weight:500;color:var(--carbon);font-size:1.02rem}
+.qh{font-size:.82rem;color:var(--muted)}
+.inp{width:100%;padding:12px;border:1px solid var(--line);border-radius:3px;background:#fff;font-size:16px;color:var(--ink)}
+textarea.inp{min-height:96px;resize:vertical;line-height:1.45}
+.inp.sm{max-width:9em}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--muted);min-width:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px;cursor:pointer;font-size:.9rem;min-height:42px;text-align:left}
+.chip[aria-pressed="true"]{background:var(--carbon);color:var(--onink);border-color:var(--carbon)}
+
+/* Listas con detalle */
+.ro{border-top:1px solid var(--line)}
+.ro:last-child{border-bottom:1px solid var(--line)}
+.pick{width:100%;display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:center;border:0;background:none;padding:12px 0;text-align:left;cursor:pointer;min-height:48px}
+.box{width:20px;height:20px;border:1.5px solid var(--muted);border-radius:3px;display:grid;place-items:center;background:#fff}
+.pick[aria-pressed="true"] .box{background:var(--gold);border-color:var(--gold)}
+.pick[aria-pressed="true"] .box::after{content:"";width:9px;height:5px;border-left:2px solid #1A1A18;border-bottom:2px solid #1A1A18;transform:rotate(-45deg) translate(1px,-1px)}
+.sub{display:flex;flex-direction:column;gap:10px;padding:0 0 14px 34px}
+.otra{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0}
+.otra .box{border-style:dashed}
+.seg{display:grid;grid-template-columns:repeat(var(--n,3),1fr);border:1px solid var(--line);border-radius:3px;overflow:hidden;background:#fff}
+.seg button{border:0;border-left:1px solid var(--line);background:transparent;padding:10px 2px;font-size:.84rem;cursor:pointer;color:var(--muted);min-height:42px}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--carbon);color:var(--onink);font-weight:500}
+.rate{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-top:1px solid var(--line)}
+.rate:last-child{border-bottom:1px solid var(--line)}
+.rate span{font-size:.92rem}
+.scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+
+/* Barra inferior */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);z-index:5;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.bar .in{max-width:680px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bar .cnt{font-size:.8rem;color:var(--muted)}
+
+/* Envío */
+.panel{background:var(--surface);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.84rem;color:var(--muted)}
+.consent input{margin-top:4px;accent-color:var(--gold);width:18px;height:18px;flex:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.err{font-size:.84rem;color:var(--warn);min-height:1.1em}
+
+footer.close{display:flex;flex-direction:column;gap:10px;padding-top:18px;border-top:1px solid var(--carbon)}
+footer.close q{font-family:var(--display);font-style:italic;font-size:1.2rem;color:var(--carbon);quotes:"«" "»"}
+footer.close p{font-size:.76rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+<meta name="theme-color" content="#FAF8F4">
+</head>
+<body>
+
+<div class="app">
+  <div class="stack" style="gap:12px">
+    <div class="top">
+      <div class="brand"><b>Scalla</b><span>Estructura con alma</span></div>
+      <span class="saved" id="saved" role="status"></span>
+    </div>
+    <div class="prog" aria-hidden="true"><i id="progBar"></i></div>
+  </div>
+
+  <!-- Intro -->
+  <section class="view" id="vIntro">
+    <div class="opening">
+      <div class="presencia" aria-hidden="true"></div>
+      <div class="txt">
+        <span class="eyebrow">Diagnóstico de arranque</span>
+        <h1 id="hello">Antes de tu propuesta, conozcamos tu negocio</h1>
+        <p class="lede">Con tus respuestas dimensiono el proyecto y preparo una propuesta a la medida. No hay respuestas correctas: «no lo sé» o «aproximado» también me sirven.</p>
+        <div class="promise">
+          <div><b>2 partes</b><span>12 secciones cortas</span></div>
+          <div><b>25 min</b><span>aproximadamente</span></div>
+          <div><b>Se guarda</b><span>puedes pausar y volver</span></div>
+        </div>
+        <ol class="parts">
+          <li><span class="n">1</span><div><b>Tu operación</b><span>Personas, productos, procesos y herramientas. Casi todo es de tocar opciones.</span></div></li>
+          <li><span class="n">2</span><div><b>Tu modelo de negocio</b><span>Clientes, propuesta de valor, ingresos y proveedores, con tus palabras.</span></div></li>
+        </ol>
+        <div class="row-btns">
+          <button class="btn" type="button" id="startBtn">Empezar</button>
+          <button class="btn ghost" type="button" id="resumeBtn" hidden>Continuar donde me quedé</button>
+        </div>
+        <p class="muted" style="font-size:.8rem">Tu avance se guarda en este dispositivo. La información es confidencial y se usa solo para preparar tu propuesta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Secciones (se generan) -->
+  <section class="view" id="vSec" hidden>
+    <div class="stack">
+      <span class="eyebrow" id="secEyebrow"></span>
+      <h2 id="secTitle"></h2>
+      <p class="lede" id="secLede"></p>
+    </div>
+    <div id="secBody"></div>
+  </section>
+
+  <!-- Envío -->
+  <section class="view" id="vSend" hidden>
+    <div class="stack">
+      <span class="eyebrow">Último paso</span>
+      <h2>Envía tus respuestas</h2>
+      <p class="lede">Revisa tus datos de contacto y toca «Enviar». Puedes regresar a cualquier sección antes de enviar.</p>
+    </div>
+    <div class="panel">
+      <form id="diag" name="diagnostico" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate class="stack" style="gap:14px">
+        <input type="hidden" name="form-name" value="diagnostico">
+        <p class="hp"><label>No llenar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <label class="f">Tu nombre<input class="inp" id="fName" name="nombre" required autocomplete="name"></label>
+        <label class="f">Empresa<input class="inp" id="fBiz" name="empresa" autocomplete="organization"></label>
+        <div class="pair">
+          <label class="f">WhatsApp<input class="inp" id="fTel" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national"></label>
+          <label class="f">Correo<input class="inp" id="fMail" name="correo" type="email" autocomplete="email"></label>
+        </div>
+        <input type="hidden" name="giro"><input type="hidden" name="enlace">
+        <input type="hidden" name="complejidad"><input type="hidden" name="autoevaluacion">
+        <textarea name="parte1" hidden></textarea><textarea name="parte2" hidden></textarea><textarea name="respuestas_json" hidden></textarea>
+        <label class="consent"><input type="checkbox" id="fOk" name="acepta_aviso" value="si" required><span>Leí y acepto el <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener">aviso de privacidad</a>. Scalla usará esta información para preparar mi propuesta.</span></label>
+        <p class="err" id="fErr" role="alert"></p>
+        <button class="btn gold" type="submit" id="fBtn" style="align-self:flex-start">Enviar mis respuestas</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Gracias -->
+  <section class="view" id="vDone" hidden>
+    <div class="opening">
+      <div class="presencia" aria-hidden="true"></div>
+      <div class="txt">
+        <span class="eyebrow">Recibido</span>
+        <h1 id="doneTitle">Gracias</h1>
+        <p class="lede">Ya tengo tus respuestas. Las reviso y te comparto la propuesta para revisarla juntos.</p>
+        <a class="btn wa" id="waDone" href="#" target="_blank" rel="noopener" style="align-self:flex-start">Avisar a Yeser por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="close">
+    <q>Primero reviso, después documento.</q>
+    <p>© Scalla Consulting · scallaconsulting.com · <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener">Aviso de privacidad</a></p>
+  </footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="in">
+    <button class="btn ghost" type="button" id="backBtn">Atrás</button>
+    <span class="cnt" id="barCnt"></span>
+    <button class="btn" type="button" id="nextBtn">Siguiente</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const WA_NUMBER="524771534134";
+  const BASE="https://herramientas.scallaconsulting.com/diagnostico/";
+
+  /* ===== Giros =====
+     Para agregar un giro: copia un bloque, cambia la clave y úsala en el enlace (?g=clave). */
+  const PRESETS={
+    general:{
+      label:"General",
+      espacios:["Oficina","Planta o taller","Bodega","Local o tienda","Trabajo remoto"],
+      funciones:["Dirección general","Operación (producir o prestar el servicio)","Compras y proveedores","Almacén e inventario","Ventas","Atención a clientes y posventa","Marketing y redes sociales","Administración, facturación y cobranza","Recursos humanos","Logística y entregas"],
+      lineas:null,
+      formulas:null,
+      nuevos:"¿Cuántos productos o servicios nuevos lanzan al año, aproximadamente?",
+      produccion:{t:"¿Cómo producen o prestan lo que venden?",opts:[["Todo con personal propio",3],["Todo con terceros",1],["Mixto",2]]},
+      pedidos:"¿Cuántos pedidos, ventas o servicios atienden al mes, en promedio?",
+      alcance:true,
+      procesos:["Diseño o desarrollo de productos o servicios","Compras y relación con proveedores","Control de calidad","Producción o prestación del servicio","Almacén e inventarios","Prospección y venta","Cotización y toma de pedidos","Entrega o instalación","Posventa y atención de quejas","Facturación y cobranza","Pago a proveedores y nómina","Contratación e inducción de personal","Marketing y redes sociales"],
+      fichas:{t:"¿Tienen por escrito cómo se hace su producto o servicio (fichas, estándares, plantillas)?",opts:["Sí, de todo","De una parte","No"]},
+      competidor:"otro proveedor",
+      ejClientes:"empresas, distribuidores, consumidor final",
+      ejCobro:"por pieza, por proyecto, por hora, por suscripción mensual",
+      ejInsumos:"materias primas, mercancía, equipo, servicios externos",
+      q2_9:"¿Hay algún producto o servicio que sigues ofreciendo más por costumbre que porque te convenga?",
+      q2_14:"¿Cuánto tiempo pasa desde que un cliente hace un pedido hasta que lo recibe? ¿En qué parte se atora más?",
+      q2_16:"¿Qué conocimiento clave del negocio solo tienes tú? ¿Está escrito o guardado en algún lado?"
+    },
+    aromas:{
+      label:"Aromas y ambientación",
+      espacios:["Laboratorio de formulación","Área de producción o envasado","Bodega","Oficina","Tienda o showroom"],
+      funciones:["Dirección general","Creación y formulación de aromas","Producción, maquila y envasado","Compras e insumos","Almacén e inventario","Ventas a mayoristas","Ventas a consumidor final (tienda, en línea)","Diseño y operación de experiencias","Instalación y mantenimiento de equipos de aromatización","Marketing y redes sociales","Administración, facturación y cobranza","Logística y envíos"],
+      lineas:["Fragancias para ambiente a granel","Producto terminado (sprays, difusores, velas, etc.)","Aromas a la medida para un cliente","Marca blanca o maquila para otras marcas","Servicio de aromatización de espacios (equipos y recargas)","Experiencias (talleres, eventos, activaciones)"],
+      formulas:{t:"¿Cuántas fórmulas activas tienen?",opts:[["Menos de 20",1],["20 a 50",1],["51 a 150",2],["Más de 150",3]]},
+      nuevos:"¿Cuántos desarrollos nuevos (fórmulas o productos) hacen al mes, en promedio?",
+      produccion:{t:"La producción es:",opts:[["Toda interna",3],["Toda con un maquilador externo",1],["Mixta",2]]},
+      pedidos:"¿Cuántos pedidos atienden al mes, en promedio?",
+      alcance:true,
+      procesos:["Desarrollo de una fórmula nueva","Desarrollo a la medida para un cliente (solicitud, muestra, aprobación)","Compra de insumos y relación con proveedores","Control de calidad (materia prima y producto terminado)","Producción, envasado y etiquetado","Almacén e inventarios","Prospección y venta a mayoristas","Cotización y toma de pedidos","Entrega, envío o instalación","Diseño y operación de experiencias","Posventa (recargas, mantenimiento, quejas)","Facturación y cobranza","Contratación e inducción de personal"],
+      fichas:{t:"¿Tienen fichas técnicas u hojas de seguridad de sus productos?",opts:["Sí, de todos","De algunos","No"]},
+      competidor:"otro proveedor de aromas",
+      ejClientes:"hoteles, tiendas, marcas, corporativos, consumidor final",
+      ejCobro:"por litro, por pieza, por desarrollo de fórmula, por servicio mensual, por evento",
+      ejInsumos:"fragancias, aceites, bases, envases, equipos",
+      q2_9:"Las experiencias que creas, ¿son un negocio por sí mismas o una herramienta para vender más aromas?",
+      q2_14:"¿Cuánto tiempo pasa desde que un mayorista hace un pedido hasta que lo recibe? ¿En qué parte se atora más?",
+      q2_16:"¿Dónde están guardadas tus fórmulas y quién más las conoce además de ti? ¿Están protegidas (acuerdos de confidencialidad, registro de marca)?"
+    },
+    alimentos:{
+      label:"Alimentos y bebidas",
+      espacios:["Cocina","Salón","Barra","Bodega","Cocina central"],
+      funciones:["Dirección general","Cocina y producción","Barra (café o bebidas)","Servicio en salón","Caja","Compras e insumos","Almacén","Limpieza","Marketing y redes sociales","Administración y nómina","Entregas a domicilio"],
+      lineas:null,
+      formulas:{t:"¿Cuántos productos tiene tu menú?",opts:[["Menos de 20",1],["20 a 50",1],["51 a 100",2],["Más de 100",3]]},
+      nuevos:"¿Cuántos productos nuevos agregan al menú al año, aproximadamente?",
+      produccion:{t:"¿Dónde se prepara lo que venden?",opts:[["Todo en el lugar",3],["Compramos mucho producto terminado",1],["Parte en cocina central",2]]},
+      pedidos:"¿Cuántos tickets o ventas hacen en un día normal, en promedio?",
+      alcance:false,
+      procesos:["Desarrollo de menú y recetas","Compras a proveedores","Recepción y almacenamiento de insumos","Preparación previa (mise en place)","Servicio al cliente en salón","Pedidos para llevar o a domicilio","Control de mermas e inventarios","Higiene e inocuidad","Apertura y cierre de turno","Corte de caja","Contratación y capacitación","Marketing y redes sociales","Mantenimiento de equipo"],
+      fichas:{t:"¿Tienen recetas estandarizadas (gramajes y costo por platillo)?",opts:["Sí, de todo el menú","De una parte","No"]},
+      competidor:"otro lugar",
+      ejClientes:"clientes de paso, oficinas cercanas, eventos, pedidos a domicilio",
+      ejCobro:"venta en el lugar, apps de entrega, eventos, mayoreo",
+      ejInsumos:"café, lácteos, pan, desechables, gas",
+      q2_9:"¿Cuál es tu ticket promedio y en qué horarios se concentra la venta?",
+      q2_14:"En hora pico, ¿cuánto tarda en salir un pedido? ¿En qué parte se atora más?",
+      q2_16:"¿Dónde están tus recetas y quién más las sabe preparar además de ti?"
+    },
+    fitness:{
+      label:"Estudio o gimnasio",
+      espacios:["Sala o piso de entrenamiento","Recepción","Tienda o bar","Oficina"],
+      funciones:["Dirección general","Coaches o instructores","Recepción y atención","Venta de membresías","Programación de clases","Marketing y redes sociales","Limpieza y mantenimiento","Administración y cobranza","Tienda o bar"],
+      lineas:null,
+      formulas:null,
+      nuevos:"¿Cuántas clases o formatos nuevos lanzan al año, aproximadamente?",
+      produccion:null,
+      pedidos:"¿Cuántas clases o sesiones dan a la semana?",
+      alcance:false,
+      procesos:["Diseño de clases y programas","Programación de horarios y coaches","Venta de membresías y paquetes","Reservas y registro de asistencia","Primera clase de clientes nuevos","Seguimiento y retención de socios","Cobranza y renovaciones","Contratación y capacitación de coaches","Limpieza y mantenimiento de equipo","Marketing y contenido","Atención de quejas","Inventario de tienda o bar","Corte de caja y reportes"],
+      fichas:{t:"¿Tienen por escrito el formato de sus clases y los estándares del servicio?",opts:["Sí, de todo","De una parte","No"]},
+      competidor:"otro estudio o gimnasio",
+      ejClientes:"socios mensuales, paquetes de clases, empresas, clase suelta",
+      ejCobro:"membresía mensual, paquetes, clase suelta, sesiones privadas",
+      ejInsumos:"equipo, software de reservas, renta del local, coaches externos",
+      q2_9:"¿Cuántos socios se van al mes, aproximadamente, y sabes por qué se van?",
+      q2_14:"¿Cuánto tiempo pasa desde que alguien pregunta por primera vez hasta que se vuelve socio? ¿Dónde se pierden más?",
+      q2_16:"¿Qué parte de la experiencia depende de un coach en particular? ¿Qué pasaría si se fuera?"
+    },
+    servicios:{
+      label:"Servicios profesionales",
+      espacios:["Oficina","Trabajo remoto","En las instalaciones del cliente"],
+      funciones:["Dirección general","Venta y desarrollo de negocio","Ejecución de proyectos o del servicio","Coordinación de proyectos","Atención a clientes","Marketing y contenido","Administración, facturación y cobranza","Recursos humanos","Sistemas y tecnología"],
+      lineas:null,
+      formulas:null,
+      nuevos:"¿Cuántos servicios nuevos lanzan al año, aproximadamente?",
+      produccion:{t:"¿Quién presta el servicio?",opts:[["Personal propio",3],["Mayormente externos o freelance",1],["Mixto",2]]},
+      pedidos:"¿Cuántos proyectos o clientes atienden al mes, en promedio?",
+      alcance:true,
+      procesos:["Prospección y primera reunión","Propuesta y cotización","Cierre (firma y anticipo)","Arranque del proyecto","Ejecución y control de avance","Entrega y cierre del proyecto","Seguimiento posventa","Facturación y cobranza","Gestión de proveedores o subcontratistas","Contratación e inducción","Marketing y contenido","Control de horas y rentabilidad por proyecto"],
+      fichas:{t:"¿Tienen plantillas o una metodología escrita para entregar el servicio?",opts:["Sí, completa","En parte","No"]},
+      competidor:"otro despacho o proveedor",
+      ejClientes:"empresas, personas, gobierno",
+      ejCobro:"por proyecto, por hora, iguala mensual, por resultado",
+      ejInsumos:"software, subcontratistas, especialistas externos",
+      q2_9:"¿Qué tipo de proyecto te deja más utilidad y cuál te consume más tiempo del que cobras?",
+      q2_14:"¿Cuánto tiempo pasa desde el primer contacto hasta que el cliente firma, y desde la firma hasta la entrega?",
+      q2_16:"¿Qué conocimiento clave solo tienes tú o una persona del equipo? ¿Está escrito en algún lado?"
+    }
+  };
+
+  /* ===== Parámetros del enlace: ?n=Nombre&e=Empresa&g=giro ===== */
+  const P=new URLSearchParams(location.search);
+  const NAME=(P.get("n")||"").trim().slice(0,60);
+  const EMP=(P.get("e")||"").trim().slice(0,80);
+  const GKEY=PRESETS[(P.get("g")||"").toLowerCase()]?(P.get("g")||"").toLowerCase():"general";
+  const G=PRESETS[GKEY];
+  const KEY="scalla-diag:"+GKEY+":"+NAME.toLowerCase();
+
+  let A={};
+  try{A=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){A={};}
+  let saveT;
+  function save(){
+    try{localStorage.setItem(KEY,JSON.stringify(A));}catch(e){}
+    const s=$("saved");s.textContent="Guardado";clearTimeout(saveT);saveT=setTimeout(()=>{s.textContent="";},1400);
+  }
+  function $(id){return document.getElementById(id);}
+  function h(tag,attrs,...kids){
+    const el=document.createElement(tag);
+    for(const k in (attrs||{})){const v=attrs[k];
+      if(v==null||v===false)continue;
+      if(k==="class")el.className=v;else if(k.startsWith("on"))el.addEventListener(k.slice(2),v);else el.setAttribute(k,v===true?"":v);}
+    for(const c of kids.flat()){if(c==null||c===false)continue;el.append(c.nodeType?c:String(c));}
+    return el;
+  }
+
+  /* ===== Cuestionario ===== */
+  const RANGOS_CLIENTES=["Menos de 20","20 a 50","51 a 200","Más de 200"];
+  const S=[];
+  // Parte 1
+  S.push({part:1,title:"Datos generales",lede:"Empecemos por lo básico. Toca las opciones que apliquen.",qs:[
+    {id:"empresa",type:"text",t:"Nombre comercial y, si aplica, razón social",def:EMP},
+    {id:"anios",type:"one",t:"¿Cuántos años lleva operando la empresa?",opts:["Menos de 2","2 a 5","6 a 10","Más de 10"]},
+    {id:"espacios",type:"many",t:"¿Con qué espacios operan?",h:"Marca todos los que apliquen.",opts:G.espacios,otro:true},
+    {id:"ubicaciones",type:"num",t:"¿Cuántas ubicaciones tienen en total?",ph:"1"}
+  ]});
+  S.push({part:1,title:"Personas",lede:"Cuántas personas son y qué funciones cubren hoy.",qs:[
+    {id:"personas",type:"one",t:"¿Cuántas personas trabajan en la empresa, contándote a ti?",opts:["1 a 3","4 a 10","11 a 25","26 a 50","Más de 50"]},
+    {id:"planta",type:"nums",t:"¿Cuántas son de planta y cuántas externas?",h:"Externas: freelance, por proyecto o por evento.",fields:[["planta","De planta"],["externas","Externas"]]},
+    {id:"funciones",type:"roster",mode:"count",t:"¿Qué funciones existen hoy?",h:"Toca las que existen y escribe cuántas personas las cubren. Una misma persona puede aparecer en varias.",items:G.funciones},
+    {id:"niveles",type:"one",t:"¿Cuántos niveles de mando hay entre tú y el personal operativo?",opts:["Ninguno, todos me reportan a mí","Un nivel (hay encargados)","Dos o más"]},
+    {id:"documentos",type:"many",t:"¿Existe hoy alguno de estos documentos?",opts:["Organigrama","Descripciones de puesto","Reglamento interno","Ninguno"],none:"Ninguno"}
+  ]});
+  const prodQs=[];
+  if(G.lineas){prodQs.push({id:"lineas",type:"roster",mode:"lines",t:"¿Qué líneas manejas?",h:"Toca las que manejas y escribe cuántos productos (SKU) tiene cada una, aproximadamente.",items:G.lineas});}
+  else{
+    prodQs.push({id:"lineasN",type:"one",t:"¿Cuántas líneas de producto o servicio manejas?",opts:["1","2 a 3","4 a 6","7 o más"]});
+    prodQs.push({id:"skus",type:"one",t:"¿Cuántos productos o servicios distintos ofreces en total?",opts:["Menos de 20","20 a 100","101 a 500","Más de 500"]});
+  }
+  if(G.formulas)prodQs.push({id:"formulas",type:"one",t:G.formulas.t,opts:G.formulas.opts.map(o=>o[0])});
+  prodQs.push({id:"nuevos",type:"num",t:G.nuevos});
+  if(G.produccion)prodQs.push({id:"produccion",type:"one",t:G.produccion.t,opts:G.produccion.opts.map(o=>o[0])});
+  S.push({part:1,title:"Productos y servicios",lede:"Qué vendes y cómo se produce.",qs:prodQs});
+  const cliQs=[
+    {id:"clientes",type:"one",t:"¿Cuántos clientes activos tienes (compraron en los últimos 12 meses)?",opts:RANGOS_CLIENTES},
+    {id:"pedidos",type:"num",t:G.pedidos}
+  ];
+  if(G.alcance)cliQs.push({id:"alcance",type:"one",t:"¿Hasta dónde venden?",opts:["Solo mi estado","Otros estados","También exportamos"]});
+  S.push({part:1,title:"Clientes y pedidos",lede:"El volumen que hoy mueve la operación.",qs:cliQs});
+  const procQs=[
+    {id:"procesos",type:"roster",mode:"proc",t:"¿Qué procesos se realizan hoy?",h:"Toca los que se hacen. En cada uno, escribe quién lo hace y si está por escrito.",items:G.procesos},
+    {id:"herramientas",type:"many",t:"¿Con qué herramientas operan?",h:"Marca todas las que apliquen.",opts:["Excel o Google Sheets","Sistema administrativo o ERP","Punto de venta o software de reservas","CRM","WhatsApp como canal principal","Libreta o papel"],otro:true}
+  ];
+  if(G.fichas)procQs.push({id:"fichas",type:"one",t:G.fichas.t,opts:G.fichas.opts});
+  procQs.push({id:"faltar",type:"long",t:"Si tú faltaras dos semanas, ¿qué se detendría?"});
+  procQs.push({id:"expectativa",type:"long",t:"¿Qué esperas lograr al trabajar con Scalla y para cuándo lo necesitas?"});
+  S.push({part:1,title:"Procesos y herramientas",lede:"La sección más importante de la primera parte. Tómate tu tiempo.",qs:procQs});
+
+  // Parte 2
+  S.push({part:2,title:"Propuesta de valor",lede:"Ahora, cómo funciona tu negocio. Responde con tus palabras; dos o tres líneas bastan. Si no tienes un dato, escríbelo así.",qs:[
+    {id:"m1",type:"long",t:"En una o dos frases: ¿qué problema resuelve tu empresa y para quién?"},
+    {id:"m2",type:"long",t:"¿Por qué un cliente te elige a ti y no a "+G.competidor+"? Menciona tres razones."},
+    {id:"m3",type:"long",t:"¿Qué te piden los clientes que hoy no ofreces, o que decidiste no ofrecer?"}
+  ]});
+  S.push({part:2,title:"Clientes",qs:[
+    {id:"m4",type:"long",t:"¿Qué tipos de cliente tienes? ¿Cuál te deja más ventas?",h:"Por ejemplo: "+G.ejClientes+"."},
+    {id:"m5",type:"long",t:"¿Quiénes son tus tres clientes más importantes y qué porcentaje de tus ventas representan juntos, aproximadamente?"},
+    {id:"m6",type:"many",t:"¿Cómo llegan tus clientes nuevos?",opts:["Recomendación","Redes sociales","Ferias o eventos","Prospección directa","Página web o Google","Distribuidores o aliados"],otro:true}
+  ]});
+  S.push({part:2,title:"Ingresos y rentabilidad",qs:[
+    {id:"m7",type:"long",t:"¿Cómo cobras? ¿Qué parte de tus ingresos se repite cada mes?",h:"Por ejemplo: "+G.ejCobro+"."},
+    {id:"m8",type:"long",t:"¿Qué línea vende más y cuál te deja más margen? ¿Son la misma?"},
+    {id:"m9",type:"long",t:G.q2_9},
+    {id:"m10",type:"one",t:"¿Conoces el costo unitario de tus productos o servicios principales?",opts:["Sí, con precisión","De forma aproximada","No"]},
+    {id:"m11",type:"long",t:"¿Cuáles son tus tres gastos más grandes? ¿Sabes cuánto necesitas vender al mes para cubrir todos tus costos?"}
+  ]});
+  S.push({part:2,title:"Cadena de suministro",qs:[
+    {id:"m12",type:"long",t:"¿Cuáles son tus insumos críticos y cuántos proveedores tienes para cada uno? ¿Alguno es importado?",h:"Por ejemplo: "+G.ejInsumos+"."},
+    {id:"m13",type:"long",t:"¿Qué pasaría si mañana te fallara tu proveedor más importante? ¿Tienes alternativa?"},
+    {id:"m14",type:"long",t:G.q2_14}
+  ]});
+  S.push({part:2,title:"Lo que te hace difícil de copiar",qs:[
+    {id:"m15",type:"long",t:"¿Qué sabe hacer tu empresa que a otros les costaría mucho imitar?"},
+    {id:"m16",type:"long",t:G.q2_16}
+  ]});
+  S.push({part:2,title:"Mercado y rumbo",qs:[
+    {id:"m17",type:"long",t:"¿Quiénes son tus principales competidores y en qué te ganan?"},
+    {id:"m18",type:"long",t:"¿Dónde quieres que esté tu empresa en tres años y qué te impide llegar hoy?"}
+  ]});
+  const TOPICS=["Qué ofrezco y por qué me eligen","Quiénes son mis clientes","Cómo fijo mis precios","Mis costos y márgenes","Mis proveedores y tiempos de entrega","Mi competencia","Hacia dónde va la empresa"];
+  S.push({part:2,title:"Autoevaluación",lede:"Para cerrar: califica qué tan claro tienes cada tema.",qs:[
+    {id:"auto",type:"rate",t:"Del 1 al 5, ¿qué tan claro tienes cada tema?",h:"1 = lo tengo en la cabeza, pero me costaría explicarlo. 5 = lo tengo por escrito y con números.",topics:TOPICS}
+  ]});
+  // Numeración por parte
+  {let n1=0,n2=0;S.forEach(s=>s.qs.forEach(q=>{q.n=s.part===1?++n1:++n2;}));}
+  const P1N=S.filter(s=>s.part===1).length, P2N=S.length-P1N;
+
+  /* ===== Render de preguntas ===== */
+  function chipGroup(q,multi){
+    const wrap=h("div",{class:"chips"});
+    const cur=()=>multi?(A[q.id]||[]):A[q.id];
+    const paint=()=>wrap.querySelectorAll(".chip").forEach(b=>{const v=b.dataset.v;b.setAttribute("aria-pressed",multi?String(cur().includes(v)):String(cur()===v));});
+    q.opts.forEach(o=>wrap.append(h("button",{type:"button",class:"chip","data-v":o,"aria-pressed":"false",onclick:()=>{
+      if(multi){let arr=(A[q.id]||[]).slice();
+        if(arr.includes(o))arr=arr.filter(x=>x!==o);
+        else{ if(q.none&&o===q.none)arr=[];else if(q.none)arr=arr.filter(x=>x!==q.none); arr.push(o);}
+        A[q.id]=arr;}
+      else{A[q.id]=(A[q.id]===o)?undefined:o;}
+      paint();save();
+    }},o)));
+    paint();
+    return wrap;
+  }
+  function textInput(id,ph,cls,mode){
+    const el=h(cls==="long"?"textarea":"input",{class:"inp"+(cls==="sm"?" sm":""),placeholder:ph||null,inputmode:mode||null});
+    el.value=A[id]||"";
+    el.addEventListener("input",()=>{A[id]=el.value;save();});
+    return el;
+  }
+  function seg(opts,get,set){
+    const w=h("div",{class:"seg",style:"--n:"+opts.length});
+    const paint=()=>w.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(get()===b.dataset.v)));
+    opts.forEach(o=>w.append(h("button",{type:"button","data-v":o,onclick:()=>{set(get()===o?undefined:o);paint();save();}},o)));
+    paint();return w;
+  }
+  function rosterSub(q,rec){
+    const sub=h("div",{class:"sub"});
+    if(q.mode==="count"||q.mode==="lines"){
+      const lbl=q.mode==="count"?"Personas":"Productos aprox.";
+      const inp=h("input",{class:"inp sm",inputmode:"numeric",placeholder:"0"});inp.value=rec.n||"";
+      inp.addEventListener("input",()=>{rec.n=inp.value;save();});
+      sub.append(h("label",{class:"f"},lbl,inp));
+    }else{
+      const who=h("input",{class:"inp",placeholder:"Puesto o nombre"});who.value=rec.who||"";
+      who.addEventListener("input",()=>{rec.who=who.value;save();});
+      sub.append(h("label",{class:"f"},"¿Quién lo hace?",who));
+      sub.append(h("label",{class:"f"},"¿Está por escrito?",seg(["Sí","Parcial","No"],()=>rec.doc,v=>{rec.doc=v;})));
+    }
+    return sub;
+  }
+  function roster(q){
+    const box=h("div",{});
+    A[q.id]=A[q.id]||{};
+    const data=A[q.id];
+    q.items.forEach(name=>{
+      const rec=data[name]=data[name]||{};
+      const row=h("div",{class:"ro"});
+      const btn=h("button",{type:"button",class:"pick","aria-pressed":String(!!rec.on)},h("span",{class:"box","aria-hidden":"true"}),h("span",{},name));
+      let sub=rec.on?rosterSub(q,rec):null;
+      btn.addEventListener("click",()=>{rec.on=!rec.on;btn.setAttribute("aria-pressed",String(rec.on));
+        if(rec.on){sub=rosterSub(q,rec);row.append(sub);}else if(sub){sub.remove();sub=null;}
+        save();});
+      row.append(btn);if(sub)row.append(sub);box.append(row);
+    });
+    // Otra
+    const orec=data.__otra=data.__otra||{};
+    const row=h("div",{class:"ro"});
+    const name=h("input",{class:"inp",placeholder:"¿Otra? Escríbela aquí"});name.value=orec.name||"";
+    const line=h("div",{class:"otra"},h("span",{class:"box","aria-hidden":"true"}),name);
+    row.append(line);
+    let sub=orec.name?rosterSub(q,orec):null;if(sub)row.append(sub);
+    name.addEventListener("input",()=>{orec.name=name.value;orec.on=!!name.value.trim();
+      if(orec.on&&!sub){sub=rosterSub(q,orec);row.append(sub);}else if(!orec.on&&sub){sub.remove();sub=null;}
+      save();});
+    box.append(row);
+    return box;
+  }
+  function rate(q){
+    const box=h("div",{});A[q.id]=A[q.id]||{};
+    q.topics.forEach(tp=>{
+      box.append(h("div",{class:"rate"},h("span",{},tp),seg(["1","2","3","4","5"],()=>A[q.id][tp],v=>{A[q.id][tp]=v;})));
+    });
+    box.append(h("div",{class:"scale"},h("span",{},"1 · en mi cabeza"),h("span",{},"5 · por escrito y con números")));
+    return box;
+  }
+  function renderQ(q){
+    const w=h("div",{class:"q"},h("span",{class:"qn"},"Pregunta "+q.n),h("p",{class:"qt"},q.t));
+    if(q.h)w.append(h("p",{class:"qh"},q.h));
+    if(q.type==="text"){if(A[q.id]==null&&q.def)A[q.id]=q.def;w.append(textInput(q.id,q.ph));}
+    else if(q.type==="long")w.append(textInput(q.id,"Escribe aquí","long"));
+    else if(q.type==="num")w.append(textInput(q.id,q.ph||"0","sm","numeric"));
+    else if(q.type==="nums"){A[q.id]=A[q.id]||{};const g=h("div",{class:"pair"});
+      q.fields.forEach(([k,l])=>{const i=h("input",{class:"inp",inputmode:"numeric",placeholder:"0"});i.value=A[q.id][k]||"";
+        i.addEventListener("input",()=>{A[q.id][k]=i.value;save();});g.append(h("label",{class:"f"},l,i));});
+      w.append(g);}
+    else if(q.type==="one")w.append(chipGroup(q,false));
+    else if(q.type==="many"){w.append(chipGroup(q,true));if(q.otro)w.append(h("label",{class:"f"},"Otro",textInput(q.id+"_otro","Escribe aquí")));}
+    else if(q.type==="roster")w.append(roster(q));
+    else if(q.type==="rate")w.append(rate(q));
+    return w;
+  }
+
+  /* ===== Navegación ===== */
+  let cur=-1; // -1 intro, 0..S.length-1 secciones, S.length envío
+  const views=["vIntro","vSec","vSend","vDone"];
+  function show(v){views.forEach(x=>$(x).hidden=(x!==v));}
+  function go(i){
+    cur=i;if(i>=0){A.__s=i;try{localStorage.setItem(KEY,JSON.stringify(A));}catch(e){}}
+    const total=S.length+1;
+    $("progBar").style.width=Math.max(0,Math.min(100,Math.round((i+1)/total*100)))+"%";
+    if(i<0){show("vIntro");$("bar").hidden=true;}
+    else if(i<S.length){
+      const s=S[i];show("vSec");$("bar").hidden=false;
+      const idx=s.part===1?i+1:i-P1N+1, of=s.part===1?P1N:P2N;
+      $("secEyebrow").textContent="Parte "+s.part+" · "+(s.part===1?"Tu operación":"Tu modelo de negocio")+" · "+idx+" de "+of;
+      $("secTitle").textContent=s.title;
+      $("secLede").textContent=s.lede||"";$("secLede").hidden=!s.lede;
+      const body=$("secBody");body.replaceChildren(...s.qs.map(renderQ));
+      $("barCnt").textContent=(i+1)+" / "+S.length;
+      $("nextBtn").textContent=(i===S.length-1)?"Revisar y enviar":(i===P1N-1?"Ir a la parte 2":"Siguiente");
+    }else{
+      show("vSend");$("bar").hidden=false;$("barCnt").textContent="Envío";$("nextBtn").hidden=true;
+      if(!$("fName").value)$("fName").value=A.__nombre||NAME;
+      if(!$("fBiz").value)$("fBiz").value=A.empresa||EMP;
+    }
+    if(i<S.length)$("nextBtn").hidden=false;
+    window.scrollTo(0,0);
+  }
+  $("startBtn").addEventListener("click",()=>go(0));
+  $("resumeBtn").addEventListener("click",()=>go(Math.min(Math.max(0,A.__s|0),S.length)));
+  $("nextBtn").addEventListener("click",()=>go(cur+1));
+  $("backBtn").addEventListener("click",()=>go(cur-1));
+  ["fName","fTel","fMail","fBiz"].forEach(id=>$(id).addEventListener("input",()=>{A["__"+id]=$(id).value;save();}));
+  ["fName","fTel","fMail","fBiz"].forEach(id=>{if(A["__"+id])$(id).value=A["__"+id];});
+
+  /* ===== Resumen para el formulario ===== */
+  function val(q){
+    const v=A[q.id];
+    switch(q.type){
+      case "text":case "long":case "num":return (v||"").trim()||"—";
+      case "nums":return q.fields.map(([k,l])=>l+": "+((v&&v[k])||"—")).join(" · ");
+      case "one":return v||"—";
+      case "many":{const arr=(v||[]).slice();const o=(A[q.id+"_otro"]||"").trim();if(o)arr.push("Otro: "+o);return arr.length?arr.join(", "):"—";}
+      case "roster":{const out=[];for(const k in (v||{})){const r=v[k];if(!r||!r.on)continue;const nm=k==="__otra"?(r.name||"").trim()+" (otra)":k;
+          if(q.mode==="proc")out.push("  • "+nm+" — quién: "+((r.who||"").trim()||"—")+" · por escrito: "+(r.doc||"—"));
+          else out.push("  • "+nm+" — "+(q.mode==="count"?"personas":"productos")+": "+(r.n||"—"));}
+        return out.length?"\n"+out.join("\n"):"—";}
+      case "rate":return "\n"+q.topics.map(t=>"  • "+t+": "+((v&&v[t])||"—")).join("\n");
+    }
+    return "—";
+  }
+  function summary(part){
+    return S.filter(s=>s.part===part).map(s=>"## "+s.title+"\n"+s.qs.map(q=>q.n+". "+q.t+"\n→ "+val(q)).join("\n\n")).join("\n\n");
+  }
+  function countOn(id){const v=A[id]||{};let n=0;for(const k in v){if(v[k]&&v[k].on)n++;}return n;}
+  function complexity(){
+    const f=[];
+    const pers={"1 a 3":1,"4 a 10":1,"11 a 25":2,"26 a 50":3,"Más de 50":3}[A.personas];if(pers)f.push(["personas",pers]);
+    const fun=countOn("funciones");if(fun)f.push(["funciones "+fun,fun<=5?1:fun<=9?2:3]);
+    if(G.lineas){const l=countOn("lineas");if(l)f.push(["líneas "+l,l<=2?1:l<=4?2:3]);}
+    else{const l={"1":1,"2 a 3":1,"4 a 6":2,"7 o más":3}[A.lineasN];if(l)f.push(["líneas",l]);}
+    if(G.formulas&&A.formulas){const o=G.formulas.opts.find(x=>x[0]===A.formulas);if(o)f.push(["catálogo",o[1]]);}
+    const pr=countOn("procesos");if(pr)f.push(["procesos "+pr,pr<=7?1:pr<=11?2:3]);
+    if(G.produccion&&A.produccion){const o=G.produccion.opts.find(x=>x[0]===A.produccion);if(o)f.push(["producción",o[1]]);}
+    const u=parseInt(A.ubicaciones,10);if(u>0)f.push(["ubicaciones "+u,u===1?1:u===2?2:3]);
+    if(pr){let d=0;const v=A.procesos;for(const k in v){const r=v[k];if(r&&r.on)d+=r.doc==="Sí"?1:r.doc==="Parcial"?.5:0;}
+      const ratio=d/pr;f.push(["documentado "+Math.round(ratio*100)+"%",ratio>=.6?1:ratio>=.25?2:3]);}
+    if(!f.length)return "Sin datos suficientes";
+    const tot=f.reduce((a,x)=>a+x[1],0),max=f.length*3,r=tot/max;
+    const lvl=r<=.5?"Baja":r<=.75?"Media":"Alta";
+    return lvl+" · "+tot+" de "+max+" ("+f.map(x=>x[0]+"="+x[1]).join(", ")+")";
+  }
+  function autoeval(){const v=A.auto||{};const nums=TOPICS.map(t=>parseInt(v[t],10)).filter(n=>n>0);
+    if(!nums.length)return "—";const avg=nums.reduce((a,b)=>a+b,0)/nums.length;
+    return "Promedio "+avg.toFixed(1)+" · "+TOPICS.map(t=>t+": "+(v[t]||"—")).join(" | ");}
+
+  /* ===== Envío ===== */
+  $("diag").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const f=e.target,err=$("fErr");err.textContent="";
+    if(!$("fName").value.trim()){err.textContent="Escribe tu nombre para enviar.";$("fName").focus();return;}
+    if(!$("fOk").checked){err.textContent="Para enviar, acepta el aviso de privacidad.";return;}
+    f.giro.value=G.label+" ("+GKEY+")";
+    f.enlace.value=BASE+location.search;
+    f.complejidad.value=complexity();
+    f.autoevaluacion.value=autoeval();
+    f.parte1.value=summary(1);
+    f.parte2.value=summary(2);
+    const raw={};for(const k in A){if(!k.startsWith("__"))raw[k]=A[k];}
+    f.respuestas_json.value=JSON.stringify(raw);
+    const btn=$("fBtn");btn.disabled=true;btn.textContent="Enviando…";
+    let ok=false;
+    try{const r=await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(f)).toString()});ok=r.ok;}catch(x){ok=false;}
+    btn.disabled=false;btn.textContent="Enviar mis respuestas";
+    if(!ok){err.textContent="No se pudo enviar. Revisa tu conexión e inténtalo de nuevo; tus respuestas siguen guardadas.";return;}
+    const nm=$("fName").value.trim().split(/\s+/)[0];
+    $("doneTitle").textContent="Gracias, "+nm;
+    $("waDone").href="https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent("Hola Yeser, ya contesté el diagnóstico de Scalla. — "+$("fName").value.trim());
+    try{localStorage.removeItem(KEY);}catch(x){}
+    $("bar").hidden=true;$("progBar").style.width="100%";show("vDone");window.scrollTo(0,0);
+  });
+
+  /* ===== Inicio ===== */
+  if(NAME)$("hello").textContent="Hola, "+NAME.split(/\s+/)[0]+". Conozcamos tu negocio";
+  if(typeof A.__s==="number"&&A.__s>=0)$("resumeBtn").hidden=false;
+  go(-1);
+})();
+</script>
+</body>
+</html>
