@@ -322,8 +322,8 @@ footer.close p{font-size:.76rem;color:var(--muted)}
       </div>
       <div class="panel accent">
         <h3>¿Quieres hacerlo acompañado?</h3>
-        <p class="muted">Agenda una Sesión de Claridad de 30 minutos. Revisamos tu resultado y definimos por dónde empezar.</p>
-        <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">Agendar por WhatsApp</a>
+        <p class="muted">Pide tu Diagnóstico Scalla sin costo: una sesión de 45 minutos para revisar tu resultado y definir por dónde empezar.</p>
+        <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">Solicitar por WhatsApp</a>
         <p class="contact">O escribe directo al <b>477 153 4134</b></p>
       </div>
     </section>
@@ -531,12 +531,12 @@ footer.close p{font-size:.76rem;color:var(--muted)}
     $("plan").innerHTML=`<p class="meta-goal">Meta del mes: ${esc(pl.meta)}</p>`+pl.weeks.map((w,wi)=>`<div class="week"><span class="wn num">S${wi+1}</span><div><h3>${esc(w.t)}</h3>
       ${w.a.map((a,ai)=>{const k=wi+"-"+ai;return `<label><input type="checkbox" id="pc${k}" data-k="${k}" ${S.checks[k]?"checked":""}><span>${esc(a)}</span></label>`}).join("")}
       <p class="tool-w"><b>Herramienta de la semana:</b> ${esc(w.tool)}.</p>
-      ${wi===1?`<div class="touch"><span>¿Te atoraste? Una Sesión de Claridad de 30 minutos, sin costo, para destrabar tu plan.</span><a class="btn ghost" target="_blank" rel="noopener" href="${waMsg(`Hola, estoy en la semana 2 de mi plan del Índice de Dependencia (índice ${st.idx}) y me atoré. Quiero una Sesión de Claridad.`)}">Pedir mi sesión por WhatsApp</a></div>`:""}
+      ${wi===1?`<div class="touch"><span>¿Te atoraste? Pide tu Diagnóstico Scalla sin costo y destrabamos tu plan juntos.</span><a class="btn ghost" target="_blank" rel="noopener" href="${waMsg(`Hola, estoy en la semana 2 de mi plan del Índice de Dependencia (índice ${st.idx}) y me atoré. Quiero mi Diagnóstico Scalla.`)}">Pedir mi sesión por WhatsApp</a></div>`:""}
       ${wi===3?`<div class="touch"><span>Al terminar el mes, vuelve a medir tu índice y compara.</span><button class="btn ghost" type="button" id="remeasure">Volver a medir mi índice</button></div>`:""}
       </div></div>`).join("");
     const r=$("remeasure");if(r)r.onclick=()=>{S.prevIdx=stats(picked()).idx;go("tasks");};
     setSaveLinks();
-    $("waBtn").href=waMsg(`Hola, hice el Índice de Dependencia de Scalla: mi negocio depende ${st.idx} % de mí (semáforo ${SEM[sem(st.idx)].n.toLowerCase()}). Quiero agendar una Sesión de Claridad.`);
+    $("waBtn").href=waMsg(`Hola, hice el Índice de Dependencia de Scalla: mi negocio depende ${st.idx} % de mí (semáforo ${SEM[sem(st.idx)].n.toLowerCase()}). Quiero solicitar mi Diagnóstico Scalla.`);
   }
 
   /* ===== Eventos ===== */
