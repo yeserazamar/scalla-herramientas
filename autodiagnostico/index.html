@@ -115,6 +115,14 @@ h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;
 
 .caja{background:var(--blanco);border:1px solid var(--suave);border-left:3px solid var(--oro);padding:22px;margin-top:28px}
 .caja.verde{border-left-color:var(--pizarra)}
+.caja.ruta{background:#F5ECDA;border-color:rgba(188,138,52,.35);border-left-color:var(--oro)}
+.ruta-tramo{margin-top:10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--pizarra);font-weight:600}
+.ruta-porque{color:var(--tinta);margin-top:10px;font-size:15px;line-height:1.6}
+.ruta-precio{margin-top:12px;font-family:"Cormorant Garamond",Georgia,serif;font-size:22px;color:var(--tinta)}
+.ruta-extra{color:var(--tenue);margin-top:6px;font-size:14px;line-height:1.55}
+.ruta-extra:empty{display:none}
+.orden{color:var(--tinta);margin-top:8px;font-size:14.5px;line-height:1.6}
+.orden:empty{display:none}
 .caja h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:24px;line-height:1.2}
 .caja .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);font-weight:600}
 .caja.verde .sub{color:var(--pizarra)}
@@ -200,6 +208,7 @@ footer{border-top:1px solid var(--suave);margin-top:50px;padding:24px 0 40px;
   <div class="caja verde">
     <div class="sub">Empieza por aquí</div>
     <h3 id="r-foco"></h3>
+    <p class="orden" id="r-orden"></p>
     <ul class="acciones" id="r-acciones"></ul>
   </div>
 
@@ -212,12 +221,24 @@ footer{border-top:1px solid var(--suave);margin-top:50px;padding:24px 0 40px;
     </div>
   </div>
 
-  <div class="caja">
-    <div class="sub">Siguiente paso</div>
-    <h3 style="margin-top:4px">Hablemos de tu resultado</h3>
-    <p style="color:var(--tenue);margin-top:10px;font-size:15px">Veinte minutos por WhatsApp para revisar qué significa tu diagnóstico en tu caso concreto. Sin costo y sin compromiso.</p>
+  <div class="caja ruta">
+    <div class="sub">En la Ruta Ascenso</div>
+    <div class="ruta-tramo" id="r-tramo"></div>
+    <h3 id="r-servicio" style="margin-top:2px"></h3>
+    <p class="ruta-porque" id="r-porque"></p>
+    <div class="ruta-precio" id="r-precio"></div>
+    <p class="ruta-extra" id="r-extra"></p>
     <div class="btn-row">
-      <a class="btn verde" id="r-wa" href="#" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="btn linea" id="r-link" href="https://scallaconsulting.com/servicios" target="_blank" rel="noopener">Ver alcance y precios</a>
+    </div>
+  </div>
+
+  <div class="caja verde">
+    <div class="sub">Siguiente paso · gratis</div>
+    <h3 style="margin-top:4px">Solicita tu Diagnóstico Scalla</h3>
+    <p style="color:var(--tenue);margin-top:10px;font-size:15px">Un cuestionario adaptado a tu giro y una sesión de 45 minutos para revisar tu caso. Sales con una propuesta de alcance y precio cerrados, aunque decidas hacerlo por tu cuenta.</p>
+    <div class="btn-row">
+      <a class="btn verde" id="r-wa" href="#" target="_blank" rel="noopener">Solicitar Diagnóstico por WhatsApp</a>
     </div>
   </div>
 
@@ -238,6 +259,7 @@ footer{border-top:1px solid var(--suave);margin-top:50px;padding:24px 0 40px;
     <input type="hidden" name="nivel" id="h-nivel">
     <input type="hidden" name="dominio_debil" id="h-foco">
     <input type="hidden" name="detalle" id="h-detalle">
+    <input type="hidden" name="tramo_recomendado" id="h-tramo">
     <label class="check"><input type="checkbox" name="acepta_aviso" value="si" required><span>Leí y acepto el <a href="https://scallaconsulting.com/aviso-de-privacidad/" target="_blank" rel="noopener">aviso de privacidad</a>.</span></label>
     <label class="check"><input type="checkbox" name="acepta_invitaciones" value="si"><span>Quiero recibir invitaciones a talleres y contenido de Scalla (opcional).</span></label>
     <div class="btn-row">
@@ -337,6 +359,23 @@ const DOMINIOS = [
 
 const ESCALA = ['Nunca','A veces','Casi siempre','Siempre'];
 
+/* Ruta Ascenso: servicio recomendado según el dominio más débil */
+const SERVICIOS = 'https://scallaconsulting.com/servicios';
+const UMBRAL = 8;   // un dominio en 8/16 o menos no está resuelto; se trabaja en el orden del método
+const RUTA = {
+  claridad:{ tramo:'Tramo 02 · Claridad', servicio:'Modelo de negocio', precio:'$13,000 MXN · precio fijo', ancla:'#claridad',
+    porque:'Tu punto más débil está en la base: qué negocio eres, a quién le vendes y cómo ganas dinero. Ordenar procesos sobre un modelo confuso solo acelera el desorden; por eso la Ruta empieza aquí.',
+    extra:'Si además tienes socios o no tienes claros tus números, el paquete completo es Cuentas claras ($32,000–42,000 MXN).' },
+  arquitectura:{ tramo:'Tramo 03 · Servicio insignia', servicio:'Fuera de tu cabeza', precio:'Desde $31,000 MXN · según el tamaño de tu equipo', ancla:'#fuera-de-tu-cabeza',
+    porque:'Tus procesos, roles y decisiones viven en tu cabeza. Este servicio hace con tu equipo el manual de organización y el de procesos, y lo acompaña hasta que se usa.', extra:'' },
+  activacion:{ tramo:'Tramo 03 · Servicio insignia', servicio:'Fuera de tu cabeza', precio:'Desde $31,000 MXN · según el tamaño de tu equipo', ancla:'#fuera-de-tu-cabeza',
+    porque:'Tu equipo todavía no decide sin ti. Fuera de tu cabeza incluye la adopción: capacitación y acompañamiento hasta que el equipo opera con su propio criterio.', extra:'' },
+  escalabilidad:{ tramo:'Tramo 03 · Servicio insignia', servicio:'Fuera de tu cabeza', precio:'Desde $31,000 MXN · según el tamaño de tu equipo', ancla:'#fuera-de-tu-cabeza',
+    porque:'Crecer hoy te cuesta más horas porque la estructura no aguanta más carga. Primero hay que sacar la operación de tu cabeza; el servicio cierra con indicadores para conocer tu capacidad real.', extra:'' },
+  continuidad:{ tramo:'Tramo 04 · Continuidad', servicio:'Guía de Ascenso Mensual', precio:'$8,000–34,000 MXN al mes · de 1 a 4 sesiones', ancla:'#continuidad',
+    porque:'Tu negocio ya tiene estructura. Lo que sigue es sostenerla mientras creces: revisión mensual de indicadores y decisiones con tu equipo directivo.', extra:'' }
+};
+
 const NIVELES = [
   { max:31, nombre:'Operación dependiente',
     desc:'Hoy tu negocio no puede funcionar sin ti. No es falta de esfuerzo: es que casi todo el criterio vive en tu cabeza y no en la estructura. Es el punto de partida más común, y también el que más rápido mejora.' },
@@ -420,7 +459,14 @@ function calcular(){
 
   let min = 0;
   puntos.forEach((p,i) => { if (p < puntos[min]) min = i; });
-  const foco = DOMINIOS[min];
+  const debil = DOMINIOS[min];
+
+  /* por dónde empezar: el primer dominio sin resolver, en el orden del método;
+     si todos están resueltos, el más débil */
+  let iFoco = puntos.findIndex(p => p <= UMBRAL);
+  if (iFoco < 0) iFoco = min;
+  const foco = DOMINIOS[iFoco];
+  const saltaOrden = iFoco !== min;
 
   document.getElementById('r-nivel').textContent = nivel.nombre;
   document.getElementById('r-desc').textContent = nivel.desc;
@@ -437,7 +483,24 @@ function calcular(){
     </div>`).join('');
   document.getElementById('r-doms').innerHTML = cajas;
 
+  /* recomendación en la Ruta */
+  let clave = foco.id;
+  if (foco.id === 'escalabilidad' && total > 43) clave = 'continuidad';
+  const rec = RUTA[clave];
+  document.getElementById('r-tramo').textContent = rec.tramo;
+  document.getElementById('r-servicio').textContent = rec.servicio;
+  document.getElementById('r-porque').textContent = (saltaOrden && foco.id === 'claridad')
+    ? `Tu punto más débil es ${debil.nombre.toLowerCase()}, pero tu claridad estratégica tampoco está resuelta (${puntos[iFoco]}/16). Cuando el modelo de negocio no está claro, la Ruta siempre empieza por aquí: ordenar sobre un modelo confuso solo acelera el desorden.`
+    : rec.porque;
+  document.getElementById('r-precio').textContent = rec.precio;
+  document.getElementById('r-extra').textContent = rec.extra;
+  document.getElementById('r-link').href = SERVICIOS + rec.ancla;
+  document.getElementById('h-tramo').value = `${rec.servicio} (${rec.tramo.split(' · ')[0]})`;
+
   document.getElementById('r-foco').textContent = foco.foco;
+  document.getElementById('r-orden').textContent = saltaOrden
+    ? `Tu punto más débil es ${debil.nombre.toLowerCase()} (${puntos[min]}/16), pero el Sistema de Ascenso sigue un orden: claridad, arquitectura, activación y escalabilidad. Lo que se ordena sin resolver lo anterior no se sostiene, así que empieza por ${foco.nombre.toLowerCase()} (${puntos[iFoco]}/16).`
+    : '';
   document.getElementById('r-acciones').innerHTML =
     foco.acciones.map(a => `<li>${a}</li>`).join('');
 
@@ -445,14 +508,16 @@ function calcular(){
   const msg = `Hola, acabo de hacer el Autodiagnóstico de Ascenso.\n\n`
     + `Resultado: ${total}/64 — ${nivel.nombre}\n`
     + `${detalle}\n`
-    + `Mi punto más débil es ${foco.nombre}.\n\n`
-    + `Me gustaría platicar sobre esto.`;
+    + `Mi punto más débil es ${debil.nombre}.\n`
+    + (saltaOrden ? `Por dónde empezar: ${foco.nombre}.\n` : '')
+    + `Servicio recomendado: ${rec.servicio} (${rec.tramo.split(' · ')[0]}).\n\n`
+    + `Me gustaría solicitar el Diagnóstico Scalla.`;
   document.getElementById('r-wa').href =
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 
   document.getElementById('h-pts').value = total;
   document.getElementById('h-nivel').value = nivel.nombre;
-  document.getElementById('h-foco').value = foco.nombre;
+  document.getElementById('h-foco').value = debil.nombre;
   document.getElementById('h-detalle').value = detalle;
 
   ir('r');
